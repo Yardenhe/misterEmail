@@ -1,0 +1,16 @@
+.email-list {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.email-list .email-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-basis: 25%;
+  padding: 10px;
+  background-color: #000000c9;
+  transition: transform 0.2s;
+}

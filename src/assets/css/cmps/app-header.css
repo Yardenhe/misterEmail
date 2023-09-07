@@ -1,28 +1,32 @@
 .app-header {
-    background: #e91e63;
-    color: white;
-
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  border-bottom: 2px solid #000000;
+  padding-bottom: 10px;
 }
 
 .app-header section.container {
-    display: flex;
-    align-items: center;
-
+  display: flex;
+  align-items: center;
 }
 
 .app-header h1.logo {
-    flex-grow: 1;
-    font-weight: 600;
+  flex-grow: 1;
+  font-weight: 600;
 }
 
 .app-header .back {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .app-header nav a:not(:last-child) {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-.app-header section.container>section {
-    flex-grow: 1;
+.app-header section.container > section {
+  flex-grow: 1;
+}
+.logo-header {
+  height: 40px;
+  margin-inline: 20px;
 }

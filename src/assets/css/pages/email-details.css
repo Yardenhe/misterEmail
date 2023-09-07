@@ -1,0 +1,58 @@
+.email-details {
+  position: relative; /* Add this */
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.email-details > div {
+  margin-bottom: 10px;
+}
+
+.email-details > div:nth-child(1) {
+  font-weight: bold;
+}
+
+.email-details > div:nth-child(2) {
+  font-size: 1.2rem;
+}
+
+.email-details > div:nth-child(3) {
+  line-height: 1.4;
+}
+
+.email-details > div:nth-child(4) {
+  color: #555;
+}
+
+.email-details button {
+  position: absolute; /* Add this */
+  top: 10px; /* Adjust top position to your preference */
+  right: 10px; /* Adjust right position to your preference */
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.email-details button:hover {
+  background-color: #c0392b;
+}
+
+.email-details a {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #3498db;
+  font-weight: bold;
+}
+
+.email-details a:hover {
+  text-decoration: underline;
+}
