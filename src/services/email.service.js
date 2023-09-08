@@ -5,8 +5,10 @@ export const emailService = {
   query,
   save,
   remove,
+  update,
   getById,
   createEmail,
+  getDefaultFilter,
 };
 
 const STORAGE_KEY = "emails";
@@ -14,19 +16,27 @@ const STORAGE_KEY = "emails";
 _createEmails();
 
 async function query(filterBy) {
-  const emails = await storageService.query(STORAGE_KEY);
-  //   if (filterBy) {
-  //     var { type, maxBatteryStatus, minBatteryStatus, model } = filterBy;
-  //     maxBatteryStatus = maxBatteryStatus || Infinity;
-  //     minBatteryStatus = minBatteryStatus || 0;
-  //     emails = emails.filter(
-  //       (email) =>
-  //         email.type.toLowerCase().includes(type.toLowerCase()) &&
-  //         email.model.toLowerCase().includes(model.toLowerCase()) &&
-  //         email.batteryStatus < maxBatteryStatus &&
-  //         email.batteryStatus > minBatteryStatus
-  //     );
-  //   }
+  let emails = await storageService.query(STORAGE_KEY);
+
+  if (filterBy) {
+    console.log("true");
+    var { status, txt, isRead } = filterBy;
+    emails = emails.filter((email) => {
+      if (
+        txt &&
+        !(
+          email.body.toLowerCase().includes(txt) ||
+          email.subject.toLowerCase().includes(txt)
+        )
+      ) {
+        return false;
+      }
+      if (isRead !== null && email.isRead !== isRead) {
+        return false;
+      }
+      return true;
+    });
+  }
   return emails;
 }
 
@@ -45,6 +55,16 @@ function save(emailToSave) {
     emailToSave.isOn = false;
     return storageService.post(STORAGE_KEY, emailToSave);
   }
+}
+async function update(email) {
+  await storageService.put(STORAGE_KEY, email);
+}
+function getDefaultFilter() {
+  return {
+    status: "",
+    txt: "",
+    isRead: null,
+  };
 }
 
 function createEmail() {
@@ -81,7 +101,7 @@ function _createEmails() {
         id: "e102",
         subject: "Dont Miss you!",
         body: "Wouldnt love to catch up sometimes",
-        isRead: true,
+        isRead: false,
         isStarred: false,
         sentAt: 1551133930594,
         removedAt: null, //for later use
