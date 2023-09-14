@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { emailService } from "../services/email.service";
 import { Link } from "react-router-dom";
 
-export default function EmailDetails() {
+export function EmailDetails() {
   const [email, setEmail] = useState(null);
-  const Parms = useParams();
+  const parms = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,11 +14,11 @@ export default function EmailDetails() {
 
   async function loadEmail() {
     try {
-      const emails = await emailService.getById(Parms.emailId);
+      const emails = await emailService.getById(parms.emailId);
       setEmail(emails);
     } catch (err) {
       navigate("/email");
-      console.log("Had issues loading email", err);
+
     }
   }
   async function onRemoveEmail(emailId) {

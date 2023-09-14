@@ -1,0 +1,49 @@
+.email-Compose-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.email-Compose-form h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.form-compose {
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.form-compose label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-inline-end: 10px;
+}
+
+input[type="email"],
+input[type="text"],
+.form-compose textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.email-Compose-form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.email-Compose-form button:hover {
+  background-color: #0056b3;
+}

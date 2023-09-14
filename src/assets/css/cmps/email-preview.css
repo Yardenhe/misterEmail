@@ -1,8 +1,10 @@
 .email-preview {
   padding: 10px;
   border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
+  grid-template-columns: 30px 30px auto; 
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
   align-items: center;
 }
 .unread {
@@ -21,4 +23,22 @@
   background-color: #f5f5f5;
   border-color: #ccc;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.star-icon {
+  font-size: 15px;
+  cursor: pointer;
+  color: rgb(54, 50, 50); 
+  margin-inline: 5px;
+}
+
+.star-icon.active {
+  color: rgb(254, 254, 13); 
+}
+.main-mail {
+  display: grid;
+  grid-template-columns: auto 1fr auto; 
+  grid-auto-flow: column;
+  grid-gap: 50px;
+  padding: 10px;
+
 }

@@ -25,8 +25,8 @@ async function query(filterBy) {
       if (
         txt &&
         !(
-          email.body.toLowerCase().includes(txt) ||
-          email.subject.toLowerCase().includes(txt)
+          email.body.toLowerCase().includes(txt.toLowerCase()) ||
+          email.subject.toLowerCase().includes(txt.toLowerCase())
         )
       ) {
         return false;
@@ -52,8 +52,8 @@ function save(emailToSave) {
   if (emailToSave.id) {
     return storageService.put(STORAGE_KEY, emailToSave);
   } else {
-    emailToSave.isOn = false;
-    return storageService.post(STORAGE_KEY, emailToSave);
+    const email = createEmail(emailToSave);
+    return storageService.post(STORAGE_KEY, email);
   }
 }
 async function update(email) {
@@ -67,17 +67,17 @@ function getDefaultFilter() {
   };
 }
 
-function createEmail() {
+function createEmail(emailToSave) {
   return {
-    id,
-    subject,
-    body,
-    isRead,
-    isStarred,
-    sentAt,
-    removedAt,
-    from,
-    to,
+    id: utilService.makeId(4),
+    subject: emailToSave.subject,
+    body: emailToSave.body,
+    isRead: false,
+    isStarred: false,
+    sentAt: new Date(),
+    removedAt: null,
+    from: emailToSave.from,
+    to: emailToSave.to,
   };
 }
 

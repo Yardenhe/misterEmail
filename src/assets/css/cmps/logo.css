@@ -1,0 +1,18 @@
+.logo{
+    display: grid;
+    grid-auto-flow:column;
+    justify-content: start;
+    align-items: center;
+    padding: 10px;
+    color: rgb(65, 65, 65);
+    /* font-weight: bold; */
+    
+}
+.menu-icon{
+    cursor: pointer;
+    font-size: 20px;
+}
+.img-logo{
+    height: 25px;
+    margin-inline: 20px;
+}

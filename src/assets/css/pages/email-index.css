@@ -1,0 +1,25 @@
+.email-index{
+    display: grid;
+    grid-template-rows:auto 1fr auto  ;
+    grid-template-columns:minmax(100px, 1fr) 2fr;
+    grid-template-areas:
+     "al h"
+     "a  h"
+     "a  m"
+                    ;
+    height: 100%;
+    gap: 6px;
+    
+}
+.header{
+grid-area: h;
+}
+.aside{
+grid-area: a;
+}
+.main{
+    grid-area: m;
+}
+.aside-logo{
+    grid-area: al;
+}
