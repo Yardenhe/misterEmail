@@ -19,7 +19,7 @@ async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
 
   if (filterBy) {
-    console.log("true");
+   
     var { status, txt, isRead } = filterBy;
     emails = emails.filter((email) => {
       if (
@@ -32,6 +32,18 @@ async function query(filterBy) {
         return false;
       }
       if (isRead !== null && email.isRead !== isRead) {
+        return false;
+      }
+      if(status=="Star"&&!email.isStarred)
+      {
+        return false;
+      }
+      if(status=="Trash"&&!email.removedAt)
+      {
+        return false;
+      }
+      if(status=="Inbox"&&email.removedAt)
+      {
         return false;
       }
       return true;
@@ -61,7 +73,7 @@ async function update(email) {
 }
 function getDefaultFilter() {
   return {
-    status: "",
+    status: "Inbox",
     txt: "",
     isRead: null,
   };
@@ -74,7 +86,7 @@ function createEmail(emailToSave) {
     body: emailToSave.body,
     isRead: false,
     isStarred: false,
-    sentAt: new Date(),
+    sentAt:  Date.now(),
     removedAt: null,
     from: emailToSave.from,
     to: emailToSave.to,
@@ -84,32 +96,121 @@ function createEmail(emailToSave) {
 function _createEmails() {
   let emails = utilService.loadFromStorage(STORAGE_KEY);
   if (!emails || !emails.length) {
-    emails = [
+    const emails = [
       {
         id: "e101",
         subject: "Miss you!",
-        body: "Would love to catch up sometimes",
+        body: "Would love to catch up sometime.",
         isRead: false,
         isStarred: false,
-        sentAt: 1551133930594,
-        removedAt: null, //for later use
+        sentAt: 1642598400000, // Date in milliseconds (e.g., February 20, 2022)
+        removedAt: null,
         from: "momo@momo.com",
         to: "user@appsus.com",
-        timestamp: new Date(),
       },
       {
         id: "e102",
         subject: "Dont Miss you!",
-        body: "Wouldnt love to catch up sometimes",
+        body: "Wouldn't love to catch up sometime.",
         isRead: false,
         isStarred: false,
-        sentAt: 1551133930594,
-        removedAt: null, //for later use
+        sentAt: 1642501200000, // Date in milliseconds (e.g., February 19, 2022)
+        removedAt: null,
         from: "momo@momo.com",
         to: "user@appsus.com",
-        timestamp: new Date() - 100000,
+      },
+      {
+        id: "e103",
+        subject: "Important Update",
+        body: "Please review the attached document for important updates.",
+        isRead: true,
+        isStarred: true,
+        sentAt: 1642404000000, // Date in milliseconds (e.g., February 18, 2022)
+        removedAt: null,
+        from: "sender@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e104",
+        subject: "Reminder: Meeting Tomorrow",
+        body: "Just a reminder that we have a meeting scheduled for tomorrow at 10 AM.",
+        isRead: true,
+        isStarred: false,
+        sentAt: 1642317600000, // Date in milliseconds (e.g., February 17, 2022)
+        removedAt: null,
+        from: "organizer@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e105",
+        subject: "Vacation Plans",
+        body: "Let's discuss our vacation plans for the upcoming holidays.",
+        isRead: true,
+        isStarred: false,
+        sentAt: 1642231200000, // Date in milliseconds (e.g., February 16, 2022)
+        removedAt: null,
+        from: "friend@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e106",
+        subject: "Product Announcement",
+        body: "We're excited to announce our new product release. Check it out!",
+        isRead: false,
+        isStarred: true,
+        sentAt: 1642144800000, // Date in milliseconds (e.g., February 15, 2022)
+        removedAt: null,
+        from: "company@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e107",
+        subject: "Thank You",
+        body: "Thank you for your recent purchase. We appreciate your business!",
+        isRead: true,
+        isStarred: false,
+        sentAt: 1642058400000, // Date in milliseconds (e.g., February 14, 2022)
+        removedAt: null,
+        from: "customer@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e108",
+        subject: "Invitation to Party",
+        body: "You're invited to our annual office party on Friday night!",
+        isRead: false,
+        isStarred: false,
+        sentAt: 1641972000000, // Date in milliseconds (e.g., February 13, 2022)
+        removedAt: null,
+        from: "colleague@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e109",
+        subject: "Weekly Newsletter",
+        body: "Here's your weekly newsletter with the latest updates and news.",
+        isRead: true,
+        isStarred: true,
+        sentAt: 1641885600000, // Date in milliseconds (e.g., February 12, 2022)
+        removedAt: null,
+        from: "newsletter@example.com",
+        to: "user@appsus.com",
+      },
+      {
+        id: "e110",
+        subject: "New Project Proposal",
+        body: "I've attached the proposal for our upcoming project. Please review it.",
+        isRead: false,
+        isStarred: false,
+        sentAt: 1641799200000, // Date in milliseconds (e.g., February 11, 2022)
+        removedAt: null,
+        from: "projectmanager@example.com",
+        to: "user@appsus.com",
       },
     ];
+    
+    
+    
     utilService.saveToStorage(STORAGE_KEY, emails);
   }
 }

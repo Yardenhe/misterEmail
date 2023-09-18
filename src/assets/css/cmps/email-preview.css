@@ -1,12 +1,13 @@
 .email-preview {
-  padding: 10px;
+  
   border-bottom: 1px solid #e0e0e0;
-  grid-template-columns: 30px 30px auto; 
+  grid-template-columns: 30px 30px minmax(400px,1000px) ;
   display: grid;
   grid-auto-flow: column;
   justify-content: start;
   align-items: center;
 }
+
 .unread {
   font-weight: bold;
 }
@@ -29,16 +30,95 @@
   cursor: pointer;
   color: rgb(54, 50, 50); 
   margin-inline: 5px;
+  
 }
 
-.star-icon.active {
-  color: rgb(254, 254, 13); 
+.clicked-star {
+  color: rgb(199, 199, 20); 
 }
 .main-mail {
   display: grid;
-  grid-template-columns: auto 1fr auto; 
+  grid-template-columns: minmax(150px,220px) 1fr 1fr; 
   grid-auto-flow: column;
   grid-gap: 50px;
   padding: 10px;
+  align-items: center;
+  
+
+}
+.sent-at {
+  text-align: right;
+  display: block;
+}
+.email-preview:hover .sent-at {
+  display: none;
+  text-align: right;
+}
+.icons {
+  right: 10px;
+  display: none;
+}
+.email-preview:hover .icons {
+  display: flex;
+}
+
+.trash-icon,
+.envelope-icon {
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+  color: #777;
+}
+@media screen and (max-width: 768px) {
+  .email-preview {
+   
+    border-bottom: 1px solid #aba7a7;
+    display: flex;
+    flex-direction: row; 
+    
+   
+  }
+  
+  .unread {
+    font-weight: bold;
+  }
+  
+  .star-icon {
+    font-size: 15px;
+    cursor: pointer;
+    color: rgb(148, 148, 148);
+    margin: 5px 0;
+  
+    /* Add mobile-specific styles */
+    @media screen and (max-width: 768px) {
+      text-align: center; /* Center the star icon for mobile */
+    }
+  }
+  
+  .clicked-star {
+    color: rgb(199, 199, 20);
+  }
+  
+  .main-mail {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically for mobile */
+    justify-items: center;
+    align-items: flex-start;
+    max-height: 100px;
+  }
+  
+  .sent-at {
+    text-align: right;
+    display: block;
+  }
+  .email-preview:hover .sent-at {
+    display: block;
+    text-align: right;
+  }
+  .icons {
+    right: 10px;
+    display: block;
+    justify-self: start;
+  }
 
 }

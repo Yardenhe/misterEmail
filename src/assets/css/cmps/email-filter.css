@@ -49,3 +49,9 @@
   display: flex;
   margin-block: 20px;
 }
+.filter-icon{
+  font-size: 15px;
+  align-self: center;
+  margin-inline: 20px;
+  color: gray;
+}

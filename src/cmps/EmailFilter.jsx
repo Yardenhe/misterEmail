@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faArrowRotateRight, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from "./Dropdown";
+
 
 export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
@@ -37,7 +38,6 @@ export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
     ev.preventDefault();
     onSetFilter(filterByToEdit);
   }
-  console.log(filterByToEdit);
   return (
     <form className="email-filter">
       <section className="search-bar">
@@ -60,9 +60,12 @@ export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
           placeholder="isRead"
         // onChange={handleChange}
         />
+
         <Dropdown handleChange={handleChange} onClickClearFilter={onClickClearFilter} />
+        <FontAwesomeIcon className="filter-icon" icon={faArrowRotateRight} />
+        <FontAwesomeIcon className="filter-icon" icon={faEllipsisV} />
       </section>
-      {/* <button onClick={onSubmitFilter}>Filter</button> */}
+
 
     </form>
   );

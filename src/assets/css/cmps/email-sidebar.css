@@ -1,20 +1,26 @@
 .email-sidebar{
-    width: 60%;
-    background-color: #f0f0f0;
-    padding: 20px;
+    width: 250px ;
+    background-color: #ffffff;
+    padding: 10px;
 }
-/* Sidebar Styles */
+
 .sidebar {
-    width: 250px;
+   width: 100%;
     background-color: #f0f0f0;
     padding: 20px;
   }
   
   .sidebar-item {
-    display: flex;
+    display: grid;
     align-items: center;
+    justify-content: start;
     margin-bottom: 20px;
-    border-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 100%;
+    padding-block: 10px;
+    padding-inline: 4px;
+    grid-auto-flow: column;
     cursor: pointer;
   }
   
@@ -22,7 +28,28 @@
     margin-right: 10px;
     color: #5a5a5a;
   }
+  .sidebar-item input {
+    background: none;
+    border: none;
+    outline: none; 
+    cursor: pointer;
+    font: inherit;
+  }
   /* Hover effect */
 .sidebar-item:hover {
-    background-color: #e0e0e0; /* Change the background color on hover */
+    background-color: #bdedf4; /* Change the background color on hover */
+  }
+  .clicked{
+    background-color: #bdedf4;
+  }
+
+  @media screen and (max-width: 768px) {
+    .email-sidebar{
+      width: 250px ;
+      background-color: #ffffff;
+      padding: 10px;
+      position: absolute;
+      margin-top: 20vh;
+  }
+ 
   }

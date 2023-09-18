@@ -1,13 +1,13 @@
 .email-index{
     display: grid;
-    grid-template-rows:auto 1fr auto  ;
+    grid-template-rows:auto 1fr;
     grid-template-columns:minmax(100px, 1fr) 2fr;
     grid-template-areas:
-     "al h"
-     "a  h"
-     "a  m"
-                    ;
+    "a h"
+    "a m";
+                    
     height: 100%;
+    width: 100%;
     gap: 6px;
     
 }
@@ -23,3 +23,26 @@ grid-area: a;
 .aside-logo{
     grid-area: al;
 }
+
+@media screen and (max-width: 768px) {
+    .email-index {
+      grid-template-columns: 400px;
+      overflow:visible;
+      grid-template-areas:
+        "a"
+        "h"
+        "m"; 
+    }
+  
+    .aside-logo,
+    .header,
+    .main {
+     
+      grid-area: unset;
+      width: 100%;
+    }
+    /* .aside{
+        position: absolute;
+        margin-top: 20vh;
+    } */
+  }

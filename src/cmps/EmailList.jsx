@@ -1,10 +1,10 @@
 import EmailPreview from "./EmailPreview";
 
-export function EmailList({ emails }) { 
+export function EmailList({ emails }) {
   return (
     <ul className="email-list">
-      {emails.map((email) => (
-        <li key={email.id}> 
+      {emails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt)).map((email) => (
+        <li key={email.id}>
           <EmailPreview email={email} />
         </li>
       ))}

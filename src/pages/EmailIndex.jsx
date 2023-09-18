@@ -11,6 +11,7 @@ import { Logo } from "../cmps/logo";
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+  const [openMenu, setOpenMenu] = useState(false);
   const loggedinUser = {
     //*********************************** */
     email: "user@appsus.com",
@@ -37,13 +38,13 @@ export function EmailIndex() {
   function onSetFilter(filterToUpdate) {
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }));
   }
-
+  console.log(filterBy);
   if (!emails) return <div>Loading..</div>
   return (
     <section className="email-index">
-      <section className="aside-logo">
-        <Logo />
-      </section>
+      {/* <section className="aside-logo">
+        <Logo setOpenMenu={setOpenMenu} />
+      </section> */}
       <section className="header">
         <EmailFilter
           onSetFilter={onSetFilter}
@@ -52,9 +53,12 @@ export function EmailIndex() {
         />
 
       </section>
+
       <section className="aside">
+        <Logo setOpenMenu={setOpenMenu} />
         <Compose user={loggedinUser} />
-        <EmailSideBar />
+        {openMenu && <EmailSideBar onSetFilter={onSetFilter}
+          filterBy={filterBy} />}
       </section>
       <section className="main">
         <EmailList emails={emails} />
