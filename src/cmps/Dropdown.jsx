@@ -16,11 +16,10 @@ export function Dropdown({ handleChange, onClickClearFilter }) {
     };
 
     return (
-        <div className="custom-dropdown">
-            <div className="dropdown-header" onClick={toggleDropdown}>
-                {/* {selectedOption ? selectedOption : 'Select an option'} */}
+        <section className="custom-dropdown">
+            <section className="dropdown-header" onClick={toggleDropdown}>
                 <FontAwesomeIcon icon={isOpen ? faCaretUp : faCaretDown} />
-            </div>
+            </section>
             {isOpen && (
                 <section className="dropdown-options">
                     <input type="button" name='All' value='All' placeholder='All' onClick={() => { onClickClearFilter(), handleOptionSelect() }} />
@@ -31,7 +30,7 @@ export function Dropdown({ handleChange, onClickClearFilter }) {
                     <input type="button" name='isstarred' value='Unstarred' onClick={() => handleOptionSelect(' Unstarred')} />
                 </section>
             )}
-        </div>
+        </section>
     );
 }
 

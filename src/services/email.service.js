@@ -9,6 +9,7 @@ export const emailService = {
   getById,
   createEmail,
   getDefaultFilter,
+  getUser
 };
 
 const STORAGE_KEY = "emails";
@@ -78,7 +79,13 @@ function getDefaultFilter() {
     isRead: null,
   };
 }
-
+function getUser(){
+  const loggedinUser = {
+    email: "user@appsus.com",
+    fullname: "Mahatma Appsus",
+  };
+  return loggedinUser;
+}
 function createEmail(emailToSave) {
   return {
     id: utilService.makeId(4),

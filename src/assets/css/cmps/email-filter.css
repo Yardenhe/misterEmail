@@ -55,3 +55,19 @@
   margin-inline: 20px;
   color: gray;
 }
+.under-filter{
+  display: grid;
+  grid-auto-flow: column;
+  justify-items: center;
+  border-bottom: 1px solid #ccc;
+}
+.tags-under-filter{
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+.filter-icon-under{
+  color: gray;
+}

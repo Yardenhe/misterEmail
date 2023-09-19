@@ -32,7 +32,32 @@ export default function EmailPreview({ email }) {
     setStar((star) => !star);
     onClickStarEmail();
   };
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
 
+    if (date.toDateString() === now.toDateString()) {
+      // If the date is today, format it as a clock (e.g., "3 pm")
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const period = hours >= 12 ? "pm" : "am";
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+      return `${formattedHours}:${formattedMinutes} ${period}`;
+    } else if (date > now) {
+      // If the date is in the future, format it as a clock (e.g., "3 pm")
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const period = hours >= 12 ? "pm" : "am";
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+      return `${formattedHours}:${formattedMinutes} ${period}`;
+    } else {
+      // If the date is in the past, format it as a date (e.g., "5 September")
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return date.toLocaleDateString("en-US", options);
+    }
+  }
   async function onClickTrashEmail() {
     try {
       await emailService.update({ ...email, removedAt: Date.now() });
@@ -42,7 +67,6 @@ export default function EmailPreview({ email }) {
 
   }
   return (
-
     <article
       className={"email-preview unread" + (isRead ? "unread" : " ")}
     >
@@ -56,11 +80,11 @@ export default function EmailPreview({ email }) {
       <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={onClickStar}>
         <FontAwesomeIcon icon={faStar} />
       </section>
-      <Link to={`/email/details/${email.id}`} onClick={onClickReadEmail}>
+      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={onClickReadEmail}>
         <section className="main-mail">
           <div>{email.from}</div>
           <div>{email.subject}</div>
-          <div className="sent-at">{new Date(email.sentAt).toLocaleString()}</div>
+          <div className="sent-at">{formatDate(new Date(email.sentAt))}</div>
         </section>
       </Link>
       <section className="icons">

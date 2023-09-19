@@ -1,10 +1,17 @@
 .email-Compose-form {
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f7f7f7;
   border: 1px solid #ddd;
   border-radius: 5px;
+  position: fixed;
+  right: 100px;
+  bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  z-index: 999;
 }
 
 .email-Compose-form h1 {

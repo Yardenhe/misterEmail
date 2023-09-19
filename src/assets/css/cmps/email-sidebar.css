@@ -1,7 +1,6 @@
 .email-sidebar{
-    width: 250px ;
     background-color: #ffffff;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 .sidebar {
@@ -19,7 +18,7 @@
     border-bottom-right-radius: 20px;
     width: 100%;
     padding-block: 10px;
-    padding-inline: 4px;
+    padding-inline: 10px;
     grid-auto-flow: column;
     cursor: pointer;
   }
@@ -35,9 +34,8 @@
     cursor: pointer;
     font: inherit;
   }
-  /* Hover effect */
 .sidebar-item:hover {
-    background-color: #bdedf4; /* Change the background color on hover */
+    background-color: #bdedf4; 
   }
   .clicked{
     background-color: #bdedf4;

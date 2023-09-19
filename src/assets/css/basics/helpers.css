@@ -88,17 +88,13 @@
     opacity: 0.2;
 }
 
-
-
 .simple-button:hover:not(:disabled) {
     opacity: 1;
 }
 
-
 .medium-button {
     font-size: 1.5rem;
 }
-
 /* Transitions */
 .fast-trans {
     transition: 0.25s all;
@@ -111,7 +107,6 @@
 .slow-trans {
     transition: 0.7s all;
 }
-
 /* Spacing */
 .p5 {
     padding: 5px;

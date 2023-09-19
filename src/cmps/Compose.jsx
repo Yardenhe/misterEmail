@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export function Compose({ user }) {
   return (
-    <Link to={`/email/compose/${user.email}`}>
+    <Link to={`/email/compose`}>
       <section className="email-compose">
         <FontAwesomeIcon icon={faPencilAlt} className="pencil-icon" />
         <h1>Compose</h1>

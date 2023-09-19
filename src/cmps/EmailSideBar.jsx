@@ -27,9 +27,9 @@ export function EmailSideBar({ onSetFilter, filterBy }) {
 
 
     return (
-        <div className="email-sidebar">
+        <section className="email-sidebar">
             {sidebarItems.map((item, index) => (
-                <div className={"sidebar-item" + (clicked == item.label ? " clicked" : " ")} key={index}>
+                <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ")} key={index}>
                     <FontAwesomeIcon className="FontAwesomeIcon" icon={item.icon} />
                     <input
                         type="button"
@@ -37,10 +37,10 @@ export function EmailSideBar({ onSetFilter, filterBy }) {
                         name="status"
                         onClick={(target) => { setClicked(item.label), handleChange(target) }}
                     />
-                </div>
+                </section>
             ))
             }
-        </div >
+        </section >
 
     );
 }

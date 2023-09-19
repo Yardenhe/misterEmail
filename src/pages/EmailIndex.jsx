@@ -5,6 +5,7 @@ import { EmailFilter } from "../cmps/EmailFilter";
 import { Compose } from "../cmps/Compose";
 import { EmailSideBar } from "../cmps/EmailSideBar";
 import { Logo } from "../cmps/logo";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 
 
 
@@ -12,12 +13,10 @@ export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
   const [openMenu, setOpenMenu] = useState(false);
-  const loggedinUser = {
-    //*********************************** */
-    email: "user@appsus.com",
-    fullname: "Mahatma Appsus",
-  };
+  const params = useParams()
+  const location = useLocation()
 
+  console.log(location.pathname, location.pathname.includes('compose'));
   useEffect(() => {
     loadEmail();
   }, [filterBy]);
@@ -42,27 +41,26 @@ export function EmailIndex() {
   if (!emails) return <div>Loading..</div>
   return (
     <section className="email-index">
-      {/* <section className="aside-logo">
-        <Logo setOpenMenu={setOpenMenu} />
-      </section> */}
       <section className="header">
         <EmailFilter
           onSetFilter={onSetFilter}
           filterBy={filterBy}
           onClickClearFilter={onClickClearFilter}
         />
-
       </section>
-
       <section className="aside">
         <Logo setOpenMenu={setOpenMenu} />
-        <Compose user={loggedinUser} />
+        <Compose user={emailService.getUser()} />
         {openMenu && <EmailSideBar onSetFilter={onSetFilter}
           filterBy={filterBy} />}
       </section>
-      <section className="main">
-        <EmailList emails={emails} />
-      </section>
+
+      {(!params.emailId || location.pathname.includes('compose')) &&
+        <section className="main">
+          <EmailList emails={emails} />
+        </section>}
+      {(location.pathname.includes('compose') || params.emailId) && <Outlet />}
+
     </section>
   );
 }
