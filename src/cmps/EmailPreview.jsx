@@ -83,7 +83,7 @@ export default function EmailPreview({ email }) {
       <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={onClickReadEmail}>
         <section className="main-mail">
           <div>{email.from}</div>
-          <div>{email.subject}</div>
+          <div className="email-subject">{email.subject}</div>
           <div className="sent-at">{formatDate(new Date(email.sentAt))}</div>
         </section>
       </Link>

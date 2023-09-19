@@ -118,4 +118,12 @@
 .main-mail-link:hover{
   text-decoration: none;
 
+}@media screen and (max-width: 950px) {
+
+   .sent-at,.email-subject {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
 }
