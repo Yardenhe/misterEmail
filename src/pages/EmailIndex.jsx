@@ -16,7 +16,7 @@ export function EmailIndex() {
   const params = useParams()
   const location = useLocation()
 
-  console.log(location.pathname, location.pathname.includes('compose'));
+
   useEffect(() => {
     loadEmail();
   }, [filterBy]);
@@ -37,7 +37,26 @@ export function EmailIndex() {
   function onSetFilter(filterToUpdate) {
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }));
   }
-  console.log(filterBy);
+  async function onAddEmail(email) {
+    try {
+      console.log("Send" + email);
+      const addedEmail = await emailService.save(email);
+      setEmails((prevEmails) => [addedEmail, ...prevEmails])
+      navigate("/email");
+    } catch (err) {
+      console.log("Had issues send email", err);
+    }
+  }
+  async function onUpdateEmail(email) {
+    try {
+      const updatedEmail = await emailService.save(email);
+      setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   if (!emails) return <div>Loading..</div>
   return (
     <section className="email-index">
@@ -57,9 +76,9 @@ export function EmailIndex() {
 
       {(!params.emailId || location.pathname.includes('compose')) &&
         <section className="main">
-          <EmailList emails={emails} />
+          <EmailList emails={emails} onUpdateEmail={onUpdateEmail} />
         </section>}
-      {(location.pathname.includes('compose') || params.emailId) && <Outlet />}
+      {(location.pathname.includes('compose') || params.emailId) && <Outlet context={{ onAddEmail }} />}
 
     </section>
   );

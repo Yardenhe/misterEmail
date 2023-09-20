@@ -1,37 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { emailService } from "../services/email.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
-export default function EmailPreview({ email }) {
+export default function EmailPreview({ email, onUpdateEmail }) {
 
   const [star, setStar] = useState(email.isStarred);
   const [isRead, setisRead] = useState(email.isRead);
 
-  async function onClickReadEmail() {
 
-    try {
-      await emailService.update({ ...email, isRead: true });
-      setisRead((isRead) => !isRead);
-    } catch (error) {
-      console.log(error);
+  function onToggleIsRead() {
+    setisRead((isRead) => !isRead);
+    const updatedEmail = {
+      ...email,
+      isRead: !email.isRead
     }
+    onUpdateEmail(updatedEmail);
 
   }
-  async function onClickStarEmail() {
-    try {
-      await emailService.update({ ...email, isStarred: !star });
-    } catch (error) {
-      console.log(error);
-    }
-
-  }
-  const onClickStar = () => {
-
+  function onToggleStar() {
     setStar((star) => !star);
-    onClickStarEmail();
-  };
+    const updatedEmail = {
+      ...email,
+      isStarred: !email.isStarred
+    }
+    onUpdateEmail(updatedEmail);
+
+  }
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
@@ -77,10 +74,10 @@ export default function EmailPreview({ email }) {
         placeholder="selectEmail"
       // onChange={handleChange}
       />
-      <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={onClickStar}>
+      <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={() => onToggleStar()}>
         <FontAwesomeIcon icon={faStar} />
       </section>
-      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={onClickReadEmail}>
+      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={onToggleIsRead}>
         <section className="main-mail">
           <div>{email.from}</div>
           <div className="email-subject">{email.subject}</div>
@@ -89,7 +86,7 @@ export default function EmailPreview({ email }) {
       </Link>
       <section className="icons">
         <FontAwesomeIcon icon={faTrashCan} className="trash-icon" onClick={onClickTrashEmail} />
-        <FontAwesomeIcon icon={faEnvelope} className="envelope-icon" onClick={onClickReadEmail} />
+        <FontAwesomeIcon icon={faEnvelope} className="envelope-icon" onClick={onToggleIsRead} />
       </section>
 
 
