@@ -67,7 +67,7 @@
   cursor: pointer;
   color: #777;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 700px) {
   .email-preview {
    
     border-bottom: 1px solid #aba7a7;

@@ -34,7 +34,7 @@ async function query(filterBy) {
       ) {
         return false;
       }
-      if (isRead !== null && email.isRead !== isRead) {
+      if (isRead  && email.isRead !== isRead) {
         return false;
       }
       if(status=="Star"&&!email.isStarred)
@@ -91,10 +91,8 @@ function getUser(){
 }
 async function emailCounter() {
   let emails = await storageService.query(STORAGE_KEY);
-  let counter=0;
-  try {
-    emails.map(email => {!email.isRead?counter=counter+1:null})
-    return counter
+  try {  
+    return emails.filter(email => !email.isRead).length
   } catch (err) {
     console.log("Had issues counting emails", err);
   }

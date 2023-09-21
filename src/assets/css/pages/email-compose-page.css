@@ -110,3 +110,15 @@ input[type="text"],
   margin-inline: 5px;
   color: gray;
 }
+.email-big{
+     inset: 0;
+     width: 90%;
+     height: 90%;
+    margin: 2em;
+    padding: 2em;
+    border-radius: 1em;
+    
+}
+.email-minimized{
+  height: 5%;
+}

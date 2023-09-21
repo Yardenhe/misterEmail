@@ -9,9 +9,9 @@ import underline from "../assets/imgs/underline-1437-svgrepo-com.png";
 
 export function EmailCompose() {
   const [email, setEmail] = useState(null);
-  const Parms = useParams();
-  const navigate = useNavigate();
   const { onAddEmail } = useOutletContext();
+  const [cmpType, setCmpType] = useState("normal");
+
 
   function handleChange({ target }) {
     var { value, name: field } = target;
@@ -36,13 +36,27 @@ export function EmailCompose() {
       console.log("Had issues send email", err);
     }
   }
+
+  function DynamicStyle() {
+    switch (cmpType) {
+      case 'normal':
+        return ""
+      case 'fullscreen':
+        return " email-big "
+      case 'minimized':
+        return " email-minimized "
+      default:
+        return 'normal'
+    }
+  }
   return (
-    <form className="email-Compose-form">
+    <form className={`email-Compose-form  ${DynamicStyle()}`}>
       <section className="header-compose">
         <h3>New Message</h3>
         <section className="header-compose-icons">
-          <img className="arrow-header-underline" src={underline} alt="" />
-          <img className="arrow-header-open" src={imgUrl} alt="" />
+          <img onClick={() => setCmpType('minimized')} className="arrow-header-underline" src={underline} alt="" />
+          <img onClick={() => setCmpType("fullscreen")} className="arrow-header-open" src={imgUrl} alt="" />
+          {/* {cmpType === 'fullscreen' && <img></img>} */}
           <Link to="/email">
             <FontAwesomeIcon icon={faX} className="msg-icon" />
           </Link>

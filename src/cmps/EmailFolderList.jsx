@@ -17,10 +17,13 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
 
     useEffect(() => {
         onSetFilter(filterByToEdit);
+
     }, [filterByToEdit]);
 
 
     function handleChange({ target }) {
+        console.log("🚀 ~ file: EmailFolderList.jsx:25 ~ handleChange ~ target:", target)
+
         const { value, name: field } = target;
 
         setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));

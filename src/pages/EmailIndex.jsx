@@ -6,7 +6,7 @@ import { Compose } from "../cmps/Compose";
 import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Logo } from "../cmps/logo";
 import { Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { eventBusService } from "../services/event-bus.service";
+import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
 
 
@@ -18,10 +18,11 @@ export function EmailIndex() {
   const params = useParams()
   const navigate = useNavigate();
 
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());//.getFilterFromParams(SearchParams)
+  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(SearchParams));//.getFilterFromParams(SearchParams)
 
   useEffect(() => {
     setSearchParams(filterBy);
+    console.log("🚀 ~ file: EmailIndex.jsx:25 ~ useEffect ~ filterBy:", filterBy)
     loadEmail();
     setCounter();
   }, [filterBy]);
@@ -48,7 +49,7 @@ export function EmailIndex() {
     }
   }
   function onSetFilter(filterToUpdate) {
-    console.log(filterToUpdate);
+    console.log("🚀 ~ file: EmailIndex.jsx:51 ~ onSetFilter ~ filterToUpdate:", filterToUpdate)
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }));
   }
   async function onAddEmail(email) {
@@ -56,20 +57,21 @@ export function EmailIndex() {
       console.log("Send" + email);
       const addedEmail = await emailService.save(email);
       setEmails((prevEmails) => [addedEmail, ...prevEmails])
-      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Successfully send!' })
+
+      showSuccessMsg('Successfully send!');
       navigate("/email");
     } catch (err) {
       console.log("Had issues send email", err);
     }
   }
   async function onUpdateEmail(email) {
-
     try {
       const updatedEmail = await emailService.save(email);
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
+
       if (email.removedAt) {
-        await loadEmail()
-        eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
+        setEmails(prevEmails => prevEmails.filter(email => email.id !== updatedEmail.id));
+        showErrorMsg('Conversation moved to trash!');
       }
 
     } catch (error) {
@@ -82,7 +84,7 @@ export function EmailIndex() {
       console.log("remove" + emailId);
       await emailService.remove(emailId);
       setEmails((prevEmails) => prevEmails.filter(email => email.id !== emailId))
-      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation removed permanently!' })
+      showSuccessMsg('Conversation removed permanently!');
       navigate("/email");
 
     } catch (err) {
@@ -105,7 +107,7 @@ export function EmailIndex() {
         <Logo setOpenMenu={setOpenMenu} />
         <Compose user={emailService.getUser()} />
         <EmailFolderList onSetFilter={onSetFilter} openMenu={openMenu}
-          filterBy={status} unreadCount={unreadCount} />
+          filterBy={{ status }} unreadCount={unreadCount} />
       </section>
 
       {(!params.emailId) &&
