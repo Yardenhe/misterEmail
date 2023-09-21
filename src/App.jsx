@@ -9,6 +9,8 @@ import { AboutTeam } from "./cmps/AboutTeam";
 import { EmailIndex } from "./pages/EmailIndex";
 import { EmailDetails } from "./pages/EmailDetails";
 import { EmailCompose } from "./pages/EmailCompose";
+import { UserMsg } from "./cmps/UserMsg";
+
 
 export function App() {
   return (
@@ -29,7 +31,7 @@ export function App() {
             </Route>
           </Routes>
         </main>
-
+        <UserMsg />
         <AppFooter />
       </section>
     </Router>

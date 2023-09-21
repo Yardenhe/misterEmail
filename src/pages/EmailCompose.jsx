@@ -32,7 +32,6 @@ export function EmailCompose() {
     ev.preventDefault();
     try {
       onAddEmail(email)
-      navigate("/email")
     } catch (err) {
       console.log("Had issues send email", err);
     }
@@ -45,7 +44,7 @@ export function EmailCompose() {
           <img className="arrow-header-underline" src={underline} alt="" />
           <img className="arrow-header-open" src={imgUrl} alt="" />
           <Link to="/email">
-            <FontAwesomeIcon icon={faX} className="header-icon" />
+            <FontAwesomeIcon icon={faX} className="msg-icon" />
           </Link>
         </section>
       </section>

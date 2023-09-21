@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { emailService } from "../services/email.service";
 import { Link } from "react-router-dom";
+import { eventBusService } from "../services/event-bus.service";
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
   const parms = useParams();
   const navigate = useNavigate();
+  const { onRemoveEmail } = useOutletContext();
 
   useEffect(() => {
     loadEmail();
@@ -21,14 +23,8 @@ export function EmailDetails() {
 
     }
   }
-  async function onRemoveEmail(emailId) {
-    try {
-      console.log("remove" + emailId);
-      await emailService.remove(emailId);
-      navigate("/email");
-    } catch (err) {
-      console.log("Had issues loading emails", err);
-    }
+  function onDeleteEmail() {
+    onRemoveEmail(email.id)
   }
   if (!email) return <div>Loading...</div>;
   return (
@@ -39,7 +35,7 @@ export function EmailDetails() {
       <div>{new Date(email.sentAt).toLocaleString()}</div>
       <button
         onClick={() => {
-          onRemoveEmail(email.id);
+          onDeleteEmail(email.id);
         }}
       >
         X

@@ -18,4 +18,5 @@
 @import "./cmps/email-compose.css";
 @import "./cmps/email-sidebar.css";
 @import "./cmps/logo.css";
-@import "./cmps/drop-down.css"
+@import "./cmps/drop-down.css";
+@import "./cmps/user-msg.css";

@@ -9,7 +9,9 @@ export const emailService = {
   getById,
   createEmail,
   getDefaultFilter,
-  getUser
+  getUser,
+  getFilterFromParams,
+  emailCounter
 };
 
 const STORAGE_KEY = "emails";
@@ -53,6 +55,7 @@ async function query(filterBy) {
   return emails;
 }
 
+
 function getById(id) {
   return storageService.get(STORAGE_KEY, id);
 }
@@ -85,6 +88,26 @@ function getUser(){
     fullname: "Mahatma Appsus",
   };
   return loggedinUser;
+}
+async function emailCounter() {
+  let emails = await storageService.query(STORAGE_KEY);
+  let counter=0;
+  try {
+    emails.map(email => {!email.isRead?counter=counter+1:null})
+    return counter
+  } catch (err) {
+    console.log("Had issues counting emails", err);
+  }
+}
+
+function getFilterFromParams(searchParams) {
+  const defaultFilter = getDefaultFilter()
+  const filterBy = {}
+  for (const field in defaultFilter) {
+      filterBy[field] = searchParams.get(field) || ''
+  }
+
+  return filterBy
 }
 function createEmail(emailToSave) {
   return {

@@ -4,14 +4,18 @@ import { emailService } from "../services/email.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
-export default function EmailPreview({ email, onUpdateEmail }) {
+export default function EmailPreview({ email, onUpdateEmail, SetunreadCount }) {
 
   const [star, setStar] = useState(email.isStarred);
   const [isRead, setisRead] = useState(email.isRead);
 
 
-  function onToggleIsRead() {
+  function onToggleIsRead(isIcon) {
     setisRead((isRead) => !isRead);
+    isRead && isIcon && SetunreadCount((prev) => prev + 1);
+    !isRead && isIcon && SetunreadCount((prev) => prev - 1);
+    !isRead && !isIcon && SetunreadCount((prev) => prev - 1);
+
     const updatedEmail = {
       ...email,
       isRead: !email.isRead
@@ -55,12 +59,12 @@ export default function EmailPreview({ email, onUpdateEmail }) {
       return date.toLocaleDateString("en-US", options);
     }
   }
-  async function onClickTrashEmail() {
-    try {
-      await emailService.update({ ...email, removedAt: Date.now() });
-    } catch (error) {
-      console.log(error);
+  async function onToggleTrash() {
+    const updatedEmail = {
+      ...email,
+      removedAt: Date.now()
     }
+    onUpdateEmail(updatedEmail);
 
   }
   return (
@@ -77,7 +81,7 @@ export default function EmailPreview({ email, onUpdateEmail }) {
       <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={() => onToggleStar()}>
         <FontAwesomeIcon icon={faStar} />
       </section>
-      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={onToggleIsRead}>
+      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={() => onToggleIsRead(false)}>
         <section className="main-mail">
           <div>{email.from}</div>
           <div className="email-subject">{email.subject}</div>
@@ -85,8 +89,8 @@ export default function EmailPreview({ email, onUpdateEmail }) {
         </section>
       </Link>
       <section className="icons">
-        <FontAwesomeIcon icon={faTrashCan} className="trash-icon" onClick={onClickTrashEmail} />
-        <FontAwesomeIcon icon={faEnvelope} className="envelope-icon" onClick={onToggleIsRead} />
+        <FontAwesomeIcon icon={faTrashCan} className="trash-icon" onClick={() => onToggleTrash()} />
+        <FontAwesomeIcon icon={faEnvelope} className="envelope-icon" onClick={() => onToggleIsRead(true)} />
       </section>
 
 

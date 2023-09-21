@@ -4,7 +4,7 @@ import { faInbox, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faStar, faClock, faPaperPlane, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 
-export function EmailSideBar({ onSetFilter, filterBy }) {
+export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }) {
     const sidebarItems = [
         { icon: faInbox, label: 'Inbox' },
         { icon: faStar, label: 'Star' },
@@ -21,15 +21,16 @@ export function EmailSideBar({ onSetFilter, filterBy }) {
 
 
     function handleChange({ target }) {
-        var { value, name: field } = target;
-        setFilterByToEdit((prevUser) => ({ ...prevUser, [field]: value }));
+        const { value, name: field } = target;
+
+        setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));
     }
 
 
     return (
-        <section className="email-sidebar">
-            {sidebarItems.map((item, index) => (
-                <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ")} key={index}>
+        <section className={"email-sidebar" + (openMenu ? " slide-in" : " slide-out")}>
+            {sidebarItems.map((item) => (
+                <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ")} key={item.label}>
                     <FontAwesomeIcon className="FontAwesomeIcon" icon={item.icon} />
                     <input
                         type="button"
@@ -37,6 +38,7 @@ export function EmailSideBar({ onSetFilter, filterBy }) {
                         name="status"
                         onClick={(target) => { setClicked(item.label), handleChange(target) }}
                     />
+                    {item.label === 'Inbox' && unreadCount}
                 </section>
             ))
             }

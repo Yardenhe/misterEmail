@@ -3,23 +3,29 @@ import { emailService } from "../services/email.service";
 import { EmailList } from "../cmps/EmailList";
 import { EmailFilter } from "../cmps/EmailFilter";
 import { Compose } from "../cmps/Compose";
-import { EmailSideBar } from "../cmps/EmailSideBar";
+import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Logo } from "../cmps/logo";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { eventBusService } from "../services/event-bus.service";
 
 
 
 export function EmailIndex() {
+  const [SearchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openMenu, setOpenMenu] = useState(true);
+  const [unreadCount, SetunreadCount] = useState(0);
   const params = useParams()
-  const location = useLocation()
+  const navigate = useNavigate();
 
+  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());//.getFilterFromParams(SearchParams)
 
   useEffect(() => {
+    setSearchParams(filterBy);
     loadEmail();
+    setCounter();
   }, [filterBy]);
+
 
   function onClickClearFilter() {
     setFilterBy(emailService.getDefaultFilter());
@@ -33,8 +39,16 @@ export function EmailIndex() {
       console.log('Had issues loading emails', err)
     }
   }
-
+  async function setCounter() {
+    try {
+      SetunreadCount(await emailService.emailCounter());
+    }
+    catch (error) {
+      console.log('Had issues loading emails', err)
+    }
+  }
   function onSetFilter(filterToUpdate) {
+    console.log(filterToUpdate);
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }));
   }
   async function onAddEmail(email) {
@@ -42,43 +56,63 @@ export function EmailIndex() {
       console.log("Send" + email);
       const addedEmail = await emailService.save(email);
       setEmails((prevEmails) => [addedEmail, ...prevEmails])
+      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Successfully send!' })
       navigate("/email");
     } catch (err) {
       console.log("Had issues send email", err);
     }
   }
   async function onUpdateEmail(email) {
+
     try {
       const updatedEmail = await emailService.save(email);
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
+      if (email.removedAt) {
+        await loadEmail()
+        eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
+      }
+
     } catch (error) {
       console.log(error);
     }
 
   }
+  async function onRemoveEmail(emailId) {
+    try {
+      console.log("remove" + emailId);
+      await emailService.remove(emailId);
+      setEmails((prevEmails) => prevEmails.filter(email => email.id !== emailId))
+      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation removed permanently!' })
+      navigate("/email");
+
+    } catch (err) {
+      console.log("Had issues loading emails", err);
+    }
+  }
 
   if (!emails) return <div>Loading..</div>
+  const { status, txt, isRead } = filterBy;
   return (
     <section className="email-index">
       <section className="header">
         <EmailFilter
           onSetFilter={onSetFilter}
-          filterBy={filterBy}
+          filterBy={{ txt, isRead }}
           onClickClearFilter={onClickClearFilter}
         />
       </section>
       <section className="aside">
         <Logo setOpenMenu={setOpenMenu} />
         <Compose user={emailService.getUser()} />
-        {openMenu && <EmailSideBar onSetFilter={onSetFilter}
-          filterBy={filterBy} />}
+        <EmailFolderList onSetFilter={onSetFilter} openMenu={openMenu}
+          filterBy={status} unreadCount={unreadCount} />
       </section>
 
-      {(!params.emailId || location.pathname.includes('compose')) &&
+      {(!params.emailId) &&
         <section className="main">
-          <EmailList emails={emails} onUpdateEmail={onUpdateEmail} />
+          <EmailList emails={emails} onUpdateEmail={onUpdateEmail} SetunreadCount={SetunreadCount} />
         </section>}
-      {(location.pathname.includes('compose') || params.emailId) && <Outlet context={{ onAddEmail }} />}
+      <Outlet context={{ onAddEmail, onRemoveEmail }} />
 
     </section>
   );
