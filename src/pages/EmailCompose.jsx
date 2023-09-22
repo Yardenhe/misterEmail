@@ -6,11 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, } from "@fortawesome/free-solid-svg-icons";
 import imgUrl from "../assets/imgs/arrow-diagonal-svgrepo-com.png";
 import underline from "../assets/imgs/underline-1437-svgrepo-com.png";
+import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.png";
 
 export function EmailCompose() {
   const [email, setEmail] = useState(null);
   const { onAddEmail } = useOutletContext();
-  const [cmpType, setCmpType] = useState("normal");
+  const [type, setType] = useState("normal");
 
 
   function handleChange({ target }) {
@@ -38,7 +39,7 @@ export function EmailCompose() {
   }
 
   function DynamicStyle() {
-    switch (cmpType) {
+    switch (type) {
       case 'normal':
         return ""
       case 'fullscreen':
@@ -54,9 +55,11 @@ export function EmailCompose() {
       <section className="header-compose">
         <h3>New Message</h3>
         <section className="header-compose-icons">
-          <img onClick={() => setCmpType('minimized')} className="arrow-header-underline" src={underline} alt="" />
-          <img onClick={() => setCmpType("fullscreen")} className="arrow-header-open" src={imgUrl} alt="" />
-          {/* {cmpType === 'fullscreen' && <img></img>} */}
+          <img onClick={() => setType('minimized')} className="arrow-header-underline" src={underline} alt="" />
+          {type === 'normal' && <img onClick={() => setType("fullscreen")} className="arrow-header-open" src={imgUrl} alt="" />}
+          {type === 'minimized' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrl} alt="" />}
+          {type === 'fullscreen' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrlarrowin} alt="" />}
+
           <Link to="/email">
             <FontAwesomeIcon icon={faX} className="msg-icon" />
           </Link>
