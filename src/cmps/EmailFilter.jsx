@@ -1,42 +1,42 @@
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from "./Dropdown";
+import { useEffect, useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { Dropdown } from "./Dropdown"
 
 
 export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
-  const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
+  const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
 
   useEffect(() => {
-    onSetFilter(filterByToEdit);
-  }, [filterByToEdit]);
+    onSetFilter(filterByToEdit)
+  }, [filterByToEdit])
 
   function handleChange({ target }) {
-    var { value, name: field } = target;
+    var { value, name: field } = target
     switch (target.type) {
       case "range":
       case "number":
-        value = +target.value || 0;
-        break;
+        value = +target.value || 0
+        break
       case "checkbox":
-        value = target.checked;
-        break;
+        value = target.checked
+        break
       case "button":
         if (target.name === "isRead") {
-          value = true;
+          value = true
         } else if (target.name === "Unread") {
           {
             field = "isRead"
-            value = false;
+            value = false
           }
         }
-        break;
+        break
     }
-    setFilterByToEdit((prevUser) => ({ ...prevUser, [field]: value }));
+    setFilterByToEdit((prevUser) => ({ ...prevUser, [field]: value }))
   }
   function onSubmitFilter(ev) {
-    ev.preventDefault();
-    onSetFilter(filterByToEdit);
+    ev.preventDefault()
+    onSetFilter(filterByToEdit)
   }
   return (
     <form className="email-filter">
@@ -82,5 +82,5 @@ export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
 
 
     </form>
-  );
+  )
 }

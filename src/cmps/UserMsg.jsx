@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX, } from "@fortawesome/free-solid-svg-icons";
-import { eventBusService } from "../services/event-bus.service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faX, } from "@fortawesome/free-solid-svg-icons"
+import { eventBusService } from "../services/event-bus.service"
 
 
 
@@ -10,10 +10,10 @@ export function UserMsg() {
 
     useEffect(() => {
         eventBusService.on('show-user-msg', (msg) => {
-            setMsg(msg);
+            setMsg(msg)
             setTimeout(() => {
                 onCloseMsg()
-            }, 3000);
+            }, 3000)
         })
 
     }, [])

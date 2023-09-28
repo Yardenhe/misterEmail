@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
 
 export function Compose({ user }) {
   return (
@@ -10,5 +10,5 @@ export function Compose({ user }) {
         <h1>Compose</h1>
       </section>
     </Link>
-  );
+  )
 }

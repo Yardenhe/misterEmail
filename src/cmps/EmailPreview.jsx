@@ -1,62 +1,62 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { emailService } from "../services/email.service";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { emailService } from "../services/email.service"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-icons'
 
-export default function EmailPreview({ email, onUpdateEmail, SetunreadCount }) {
+export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
 
-  const [star, setStar] = useState(email.isStarred);
-  const [isRead, setisRead] = useState(email.isRead);
+  const [star, setStar] = useState(email.isStarred)
+  const [isRead, setisRead] = useState(email.isRead)
 
 
   function onToggleIsRead(isIcon) {
-    setisRead((isRead) => !isRead);
-    isRead && isIcon && SetunreadCount((prev) => prev + 1);
-    !isRead && isIcon && SetunreadCount((prev) => prev - 1);
-    !isRead && !isIcon && SetunreadCount((prev) => prev - 1);
+    setisRead((isRead) => !isRead)
+    isRead && isIcon && setUnreadCount((prev) => prev + 1)
+    !isRead && isIcon && setUnreadCount((prev) => prev - 1)
+    !isRead && !isIcon && setUnreadCount((prev) => prev - 1)
 
     const updatedEmail = {
       ...email,
       isRead: !email.isRead
     }
-    onUpdateEmail(updatedEmail);
+    onUpdateEmail(updatedEmail)
 
   }
   function onToggleStar() {
-    setStar((star) => !star);
+    setStar((star) => !star)
     const updatedEmail = {
       ...email,
       isStarred: !email.isStarred
     }
-    onUpdateEmail(updatedEmail);
+    onUpdateEmail(updatedEmail)
 
   }
 
   function formatDate(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
+    const date = new Date(dateString)
+    const now = new Date()
 
     if (date.toDateString() === now.toDateString()) {
       // If the date is today, format it as a clock (e.g., "3 pm")
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const period = hours >= 12 ? "pm" : "am";
-      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-      return `${formattedHours}:${formattedMinutes} ${period}`;
+      const hours = date.getHours()
+      const minutes = date.getMinutes()
+      const period = hours >= 12 ? "pm" : "am"
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+      return `${formattedHours}:${formattedMinutes} ${period}`
     } else if (date > now) {
       // If the date is in the future, format it as a clock (e.g., "3 pm")
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const period = hours >= 12 ? "pm" : "am";
-      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-      return `${formattedHours}:${formattedMinutes} ${period}`;
+      const hours = date.getHours()
+      const minutes = date.getMinutes()
+      const period = hours >= 12 ? "pm" : "am"
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+      return `${formattedHours}:${formattedMinutes} ${period}`
     } else {
       // If the date is in the past, format it as a date (e.g., "5 September")
-      const options = { year: "numeric", month: "long", day: "numeric" };
-      return date.toLocaleDateString("en-US", options);
+      const options = { year: "numeric", month: "long", day: "numeric" }
+      return date.toLocaleDateString("en-US", options)
     }
   }
   async function onToggleTrash() {
@@ -64,7 +64,7 @@ export default function EmailPreview({ email, onUpdateEmail, SetunreadCount }) {
       ...email,
       removedAt: Date.now()
     }
-    onUpdateEmail(updatedEmail);
+    onUpdateEmail(updatedEmail)
 
   }
   return (

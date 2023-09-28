@@ -1,5 +1,5 @@
-import { storageService } from "./async-storage.service.js";
-import { utilService } from "./util.service.js";
+import { storageService } from "./async-storage.service.js"
+import { utilService } from "./util.service.js"
 
 export const emailService = {
   query,
@@ -12,18 +12,18 @@ export const emailService = {
   getUser,
   getFilterFromParams,
   emailCounter
-};
+}
 
-const STORAGE_KEY = "emails";
+const STORAGE_KEY = "emails"
 
-_createEmails();
+_createEmails()
 
 async function query(filterBy) {
-  let emails = await storageService.query(STORAGE_KEY);
+  let emails = await storageService.query(STORAGE_KEY)
 
   if (filterBy) {
    
-    var { status, txt, isRead } = filterBy;
+    var { status, txt, isRead } = filterBy
     emails = emails.filter((email) => {
       if (
         txt &&
@@ -32,69 +32,69 @@ async function query(filterBy) {
           email.subject.toLowerCase().includes(txt.toLowerCase())
         )
       ) {
-        return false;
+        return false
       }
       if (isRead  && email.isRead !== isRead) {
-        return false;
+        return false
       }
       if(status=="Star"&&!email.isStarred)
       {
-        return false;
+        return false
       }
       if(status=="Trash"&&!email.removedAt)
       {
-        return false;
+        return false
       }
       if(status=="Inbox"&&email.removedAt)
       {
-        return false;
+        return false
       }
-      return true;
-    });
+      return true
+    })
   }
-  return emails;
+  return emails
 }
 
 
 function getById(id) {
-  return storageService.get(STORAGE_KEY, id);
+  return storageService.get(STORAGE_KEY, id)
 }
 
 function remove(id) {
-  return storageService.remove(STORAGE_KEY, id);
+  return storageService.remove(STORAGE_KEY, id)
 }
 
 function save(emailToSave) {
   if (emailToSave.id) {
-    return storageService.put(STORAGE_KEY, emailToSave);
+    return storageService.put(STORAGE_KEY, emailToSave)
   } else {
-    const email = createEmail(emailToSave);
-    return storageService.post(STORAGE_KEY, email);
+    const email = createEmail(emailToSave)
+    return storageService.post(STORAGE_KEY, email)
   }
 }
 async function update(email) {
-  await storageService.put(STORAGE_KEY, email);
+  await storageService.put(STORAGE_KEY, email)
 }
 function getDefaultFilter() {
   return {
     status: "Inbox",
     txt: "",
     isRead: null,
-  };
+  }
 }
 function getUser(){
   const loggedinUser = {
     email: "user@appsus.com",
     fullname: "Mahatma Appsus",
-  };
-  return loggedinUser;
+  }
+  return loggedinUser
 }
 async function emailCounter() {
-  let emails = await storageService.query(STORAGE_KEY);
+  let emails = await storageService.query(STORAGE_KEY)
   try {  
     return emails.filter(email => !email.isRead).length
   } catch (err) {
-    console.log("Had issues counting emails", err);
+    console.log("Had issues counting emails", err)
   }
 }
 
@@ -118,11 +118,11 @@ function createEmail(emailToSave) {
     removedAt: null,
     from: emailToSave.from,
     to: emailToSave.to,
-  };
+  }
 }
 
 function _createEmails() {
-  let emails = utilService.loadFromStorage(STORAGE_KEY);
+  let emails = utilService.loadFromStorage(STORAGE_KEY)
   if (!emails || !emails.length) {
     const emails = [
       {
@@ -235,10 +235,10 @@ function _createEmails() {
         from: "projectmanager@example.com",
         to: "user@appsus.com",
       },
-    ];
+    ]
     
     
     
-    utilService.saveToStorage(STORAGE_KEY, emails);
+    utilService.saveToStorage(STORAGE_KEY, emails)
   }
 }

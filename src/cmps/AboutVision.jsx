@@ -15,5 +15,5 @@ export function AboutVision() {
         Gmail remains a cornerstone of efficient online communication.
       </h4>
     </>
-  );
+  )
 }

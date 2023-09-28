@@ -1,7 +1,7 @@
 
-import imgUrl from "../assets/imgs/gmail-logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import imgUrl from "../assets/imgs/gmail-logo.png"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 export function Logo({ setOpenMenu }) {
     return (

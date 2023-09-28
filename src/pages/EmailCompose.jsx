@@ -1,40 +1,40 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { emailService } from "../services/email.service";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX, } from "@fortawesome/free-solid-svg-icons";
-import imgUrl from "../assets/imgs/arrow-diagonal-svgrepo-com.png";
-import underline from "../assets/imgs/underline-1437-svgrepo-com.png";
-import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.png";
+import { useState, useEffect } from "react"
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
+import { emailService } from "../services/email.service"
+import { Link } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faX, } from "@fortawesome/free-solid-svg-icons"
+import imgUrl from "../assets/imgs/arrow-diagonal-svgrepo-com.png"
+import underline from "../assets/imgs/underline-1437-svgrepo-com.png"
+import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.png"
 
 export function EmailCompose() {
-  const [email, setEmail] = useState(null);
-  const { onAddEmail } = useOutletContext();
-  const [type, setType] = useState("normal");
+  const [email, setEmail] = useState(null)
+  const { onAddEmail } = useOutletContext()
+  const [type, setType] = useState("normal")
 
 
   function handleChange({ target }) {
-    var { value, name: field } = target;
+    var { value, name: field } = target
     switch (target.type) {
       case "range":
       case "number":
-        value = +target.value || 0;
-        break;
+        value = +target.value || 0
+        break
       case "checkbox":
-        value = target.checked;
-        break;
+        value = target.checked
+        break
     }
-    setEmail((prevEmail) => ({ ...prevEmail, [field]: value }));
+    setEmail((prevEmail) => ({ ...prevEmail, [field]: value }))
 
   }
 
   async function onSendEmail(ev) {
-    ev.preventDefault();
+    ev.preventDefault()
     try {
       onAddEmail(email)
     } catch (err) {
-      console.log("Had issues send email", err);
+      console.log("Had issues send email", err)
     }
   }
 
@@ -103,5 +103,5 @@ export function EmailCompose() {
       </div>
       <button onClick={onSendEmail}>Send</button>
     </form>
-  );
+  )
 }

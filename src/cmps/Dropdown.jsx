@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 export function Dropdown({ handleChange, onClickClearFilter }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedOption, setSelectedOption] = useState(null)
 
     const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+        setIsOpen(!isOpen)
+    }
 
     const handleOptionSelect = (option) => {
-        setSelectedOption(option);
-        setIsOpen(false);
-    };
+        setSelectedOption(option)
+        setIsOpen(false)
+    }
 
     return (
         <section className="custom-dropdown">
@@ -31,7 +31,7 @@ export function Dropdown({ handleChange, onClickClearFilter }) {
                 </section>
             )}
         </section>
-    );
+    )
 }
 
 

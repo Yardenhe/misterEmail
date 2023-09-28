@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInbox, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { faStar, faClock, faPaperPlane, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { useState, useEffect } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faInbox, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faClock, faPaperPlane, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
 
 export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }) {
@@ -11,22 +11,22 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
         { icon: faClock, label: 'Snoozed' },
         { icon: faPaperPlane, label: 'Sent' },
         { icon: faTrashCan, label: 'Trash' },
-    ];
-    const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
-    const [clicked, setClicked] = useState('Inbox');
+    ]
+    const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+    const [clicked, setClicked] = useState('Inbox')
 
     useEffect(() => {
-        onSetFilter(filterByToEdit);
+        onSetFilter(filterByToEdit)
 
-    }, [filterByToEdit]);
+    }, [filterByToEdit])
 
 
     function handleChange({ target }) {
-        console.log("🚀 ~ file: EmailFolderList.jsx:25 ~ handleChange ~ target:", target)
 
-        const { value, name: field } = target;
 
-        setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));
+        const { value, name: field } = target
+
+        setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }))
     }
 
 
@@ -47,5 +47,5 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
             }
         </section >
 
-    );
+    )
 }
