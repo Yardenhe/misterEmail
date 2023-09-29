@@ -1,5 +1,6 @@
 .email-sidebar{
     background-color: #ffffff;
+    background-color: rgba(246,248,252,255);
     
 }
 
@@ -16,37 +17,58 @@
     margin-bottom: 20px;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    width: 100%;
     padding-block: 10px;
     padding-inline: 10px;
     grid-auto-flow: column;
     cursor: pointer;
+    padding-left: 2em
   }
   
   .sidebar-item .FontAwesomeIcon {
     margin-right: 10px;
     color: #5a5a5a;
   }
-  .sidebar-item input {
+  .sidebar-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer; /* Add pointer cursor to make it clear it's clickable */
+  }
+  .input-item {
     background: none;
     border: none;
     outline: none; 
     cursor: pointer;
     font: inherit;
   }
-.sidebar-item:hover {
+  .hide-input{
+    color: transparent;
+   background-color: transparent;
+  }
+  .sidebar-item:hover {
     background-color: #bdedf4; 
   }
   .clicked{
     background-color: #bdedf4;
+   
+  
+   
+    
   }
   .slide-in {
-    transform: translateX(0); /* Start position */
+    transform: translateX(0); 
     transition: transform 0.3s ease-in-out;
   }
   
-  .slide-out {
-    transform: translateX(-100%);
+ .slide-out {
+    margin-left: 20px; 
+    transition: margin-left 0.3s;
+    border-radius: 100px;
+    width: 3em;
+    height: 3em;
+    padding-left: 1em;
+    transform: translateX(0); 
+    transition: transform 0.3s ease-in-out;
+    
   }
 
   @media screen and (max-width: 700px) {

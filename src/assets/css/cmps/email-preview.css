@@ -1,10 +1,11 @@
 .email-preview {
   border-block: 1px solid #e0e0e0;
-  grid-template-columns: 30px 30px minmax(400px,1000px) ;
+  grid-template-columns: 30px 30px minmax(400px,1fr) ;
   display: grid;
   grid-auto-flow: column;
   justify-content: start;
   align-items: center;
+  padding-inline: 0.7em;
 }
 
 .unread {

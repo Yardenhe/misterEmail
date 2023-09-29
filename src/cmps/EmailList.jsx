@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types'
 import EmailPreview from "./EmailPreview"
+import { emailService } from "../services/email.service"
+
 
 
 export function EmailList({ emails, onUpdateEmail, setUnreadCount }) {
@@ -12,4 +15,7 @@ export function EmailList({ emails, onUpdateEmail, setUnreadCount }) {
       ))}
     </ul>
   )
+}
+EmailList.propTypes = {
+  emails: PropTypes.arrayOf(emailService.getEmailShape())
 }

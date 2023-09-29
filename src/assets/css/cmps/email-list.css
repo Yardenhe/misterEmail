@@ -4,6 +4,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   list-style-type: none;
   overflow: scroll;
+  margin-inline: 0;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  border-end-end-radius: 1em;
+  border-end-start-radius: 1em;
 }
 
 .email-list .email-actions {
@@ -14,4 +19,5 @@
   padding: 10px;
   background-color: #000000c9;
   transition: transform 0.2s;
+  
 }

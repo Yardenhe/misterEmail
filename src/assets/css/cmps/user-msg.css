@@ -1,16 +1,16 @@
-.user-msg{
-display: fixed;
-margin: 10px;
-background-color: rgb(22, 22, 22);
-color: white;
-align-self: flex-start;
-display: grid;
-grid-auto-flow: column;
-padding: 15px;
-border-radius: 5px;
-align-items: center;
-justify-content: space-around;
-
+.user-msg {
+  position: fixed;
+  bottom: 20px; 
+  left: 20px; 
+  background-color: rgb(22, 22, 22);
+  color: white;
+  display: grid;
+  grid-auto-flow: column;
+  padding: 15px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 999;
 }
 .msg-icon{
   cursor: pointer;

@@ -1,5 +1,6 @@
 import { storageService } from "./async-storage.service.js"
 import { utilService } from "./util.service.js"
+import PropTypes from 'prop-types'
 
 export const emailService = {
   query,
@@ -11,7 +12,8 @@ export const emailService = {
   getDefaultFilter,
   getUser,
   getFilterFromParams,
-  emailCounter
+  emailCounter,
+  getEmailShape
 }
 
 const STORAGE_KEY = "emails"
@@ -37,15 +39,23 @@ async function query(filterBy) {
       if (isRead  && email.isRead !== isRead) {
         return false
       }
-      if(status=="Star"&&!email.isStarred)
+      if(status==="Star"&&!email.isStarred)
       {
         return false
       }
-      if(status=="Trash"&&!email.removedAt)
+      if(status==="Trash"&&!email.removedAt)
       {
         return false
       }
-      if(status=="Inbox"&&email.removedAt)
+      if(status==="Drafts"&&email.sentAt)
+      {
+        return false
+      }
+      if(status==="Sent"&&email.from!==getUser().email)
+      {
+        return false
+      }
+      if(status==="Inbox"&&email.removedAt)
       {
         return false
       }
@@ -54,16 +64,12 @@ async function query(filterBy) {
   }
   return emails
 }
-
-
 function getById(id) {
   return storageService.get(STORAGE_KEY, id)
 }
-
 function remove(id) {
   return storageService.remove(STORAGE_KEY, id)
 }
-
 function save(emailToSave) {
   if (emailToSave.id) {
     return storageService.put(STORAGE_KEY, emailToSave)
@@ -97,7 +103,6 @@ async function emailCounter() {
     console.log("Had issues counting emails", err)
   }
 }
-
 function getFilterFromParams(searchParams) {
   const defaultFilter = getDefaultFilter()
   const filterBy = {}
@@ -120,124 +125,90 @@ function createEmail(emailToSave) {
     to: emailToSave.to,
   }
 }
-
+function getEmailShape() {
+  return PropTypes.shape({
+      id: PropTypes.string,
+      subject: PropTypes.string,
+      body: PropTypes.string,
+      isRead: PropTypes.bool,
+      isStarred: PropTypes.bool,
+      sentAt: PropTypes.number,
+      removedAt: PropTypes.number,
+      from: PropTypes.string,
+      to: PropTypes.string
+  })
+}
 function _createEmails() {
-  let emails = utilService.loadFromStorage(STORAGE_KEY)
+  let emails = [];
+   emails = utilService.loadFromStorage(STORAGE_KEY)
   if (!emails || !emails.length) {
-    const emails = [
-      {
-        id: "e101",
-        subject: "Miss you!",
-        body: "Would love to catch up sometime.",
-        isRead: false,
-        isStarred: false,
-        sentAt: 1642598400000, // Date in milliseconds (e.g., February 20, 2022)
-        removedAt: null,
-        from: "momo@momo.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e102",
-        subject: "Dont Miss you!",
-        body: "Wouldn't love to catch up sometime.",
-        isRead: false,
-        isStarred: false,
-        sentAt: 1642501200000, // Date in milliseconds (e.g., February 19, 2022)
-        removedAt: null,
-        from: "momo@momo.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e103",
-        subject: "Important Update",
-        body: "Please review the attached document for important updates.",
-        isRead: true,
-        isStarred: true,
-        sentAt: 1642404000000, // Date in milliseconds (e.g., February 18, 2022)
-        removedAt: null,
-        from: "sender@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e104",
-        subject: "Reminder: Meeting Tomorrow",
-        body: "Just a reminder that we have a meeting scheduled for tomorrow at 10 AM.",
-        isRead: true,
-        isStarred: false,
-        sentAt: 1642317600000, // Date in milliseconds (e.g., February 17, 2022)
-        removedAt: null,
-        from: "organizer@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e105",
-        subject: "Vacation Plans",
-        body: "Let's discuss our vacation plans for the upcoming holidays.",
-        isRead: true,
-        isStarred: false,
-        sentAt: 1642231200000, // Date in milliseconds (e.g., February 16, 2022)
-        removedAt: null,
-        from: "friend@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e106",
-        subject: "Product Announcement",
-        body: "We're excited to announce our new product release. Check it out!",
-        isRead: false,
-        isStarred: true,
-        sentAt: 1642144800000, // Date in milliseconds (e.g., February 15, 2022)
-        removedAt: null,
-        from: "company@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e107",
-        subject: "Thank You",
-        body: "Thank you for your recent purchase. We appreciate your business!",
-        isRead: true,
-        isStarred: false,
-        sentAt: 1642058400000, // Date in milliseconds (e.g., February 14, 2022)
-        removedAt: null,
-        from: "customer@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e108",
-        subject: "Invitation to Party",
-        body: "You're invited to our annual office party on Friday night!",
-        isRead: false,
-        isStarred: false,
-        sentAt: 1641972000000, // Date in milliseconds (e.g., February 13, 2022)
-        removedAt: null,
-        from: "colleague@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e109",
-        subject: "Weekly Newsletter",
-        body: "Here's your weekly newsletter with the latest updates and news.",
-        isRead: true,
-        isStarred: true,
-        sentAt: 1641885600000, // Date in milliseconds (e.g., February 12, 2022)
-        removedAt: null,
-        from: "newsletter@example.com",
-        to: "user@appsus.com",
-      },
-      {
-        id: "e110",
-        subject: "New Project Proposal",
-        body: "I've attached the proposal for our upcoming project. Please review it.",
-        isRead: false,
-        isStarred: false,
-        sentAt: 1641799200000, // Date in milliseconds (e.g., February 11, 2022)
-        removedAt: null,
-        from: "projectmanager@example.com",
-        to: "user@appsus.com",
-      },
-    ]
+    const categories = ["Inbox", "Sent", "Star", "Drafts"];
+    const senderNames = [
+      "JohnDoe",
+      "JaneSmith",
+      "AliceJohnson",
+      "BobWilliams",
+      "EmilyBrown",
+      "DavidDavis",
+      "SarahLee",
+      "MichaelWilson",
+      "OliviaMartinez",
+      "JamesTaylor",
+    ];
     
+    const emailSubjects = [
+      "Important Project Update",
+      "Meeting Rescheduling",
+      "Weekly Newsletter",
+      "Product Launch Announcement",
+      "Payment Confirmation",
+      "Invitation to the Conference",
+      "Holiday Greetings",
+      "New Job Opportunity",
+      "Feedback Request",
+      "Travel Itinerary",
+    ];
     
+    const emailBodies = [
+      "Dear team, I wanted to inform you about an important update regarding our project timelines...",
+      "Hello, Due to unforeseen circumstances, we need to reschedule the upcoming meeting...",
+      "Greetings, Here's your weekly newsletter with the latest updates and news...",
+      "Hello everyone, We're excited to announce the launch of our new product...",
+      "Hi there, We're writing to confirm the successful payment of your recent order...",
+      "Dear colleague, You are cordially invited to our annual conference...",
+      "Warmest wishes, As the holiday season approaches, we wanted to send our greetings...",
+      "Hi, We have a new job opportunity that might be of interest to you...",
+      "Hello, We value your feedback and would appreciate it if you could take a few minutes...",
+      "Dear traveler, Here's your travel itinerary for your upcoming trip...",
+    ];
+    
+    emails = [];
+    for (let i = 1; i <= 50; i++) {
+      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+      const randomYear = Math.random() < 0.5 ? 2022 : 2023;
+      const randomMonth = Math.floor(Math.random() * 12) + 1; // 1-12
+      const randomDay = Math.floor(Math.random() * 30) + 1; // 1-30
+      const randomHour = Math.floor(Math.random() * 24); // 0-23
+      const randomMinute = Math.floor(Math.random() * 60); // 0-59
+      const randomSenderName = senderNames[Math.floor(Math.random() * senderNames.length)];
+      const randomSubject = emailSubjects[Math.floor(Math.random() * emailSubjects.length)];
+      const randomBody = emailBodies[Math.floor(Math.random() * emailBodies.length)];
+    
+      const email = {
+        id: `e${i}`,
+        subject: randomSubject,
+        body: randomBody,
+        isRead: Math.random() < 0.5,
+        isStarred: Math.random() < 0.3,
+        sentAt: new Date(randomYear, randomMonth - 1, randomDay, randomHour, randomMinute).getTime(),
+        removedAt: null,
+        from: `${randomSenderName}@example.com>`,
+        to: "user@appsus.com",
+        category: randomCategory,
+      };
+    
+      emails.push(email);
+    }
     
     utilService.saveToStorage(STORAGE_KEY, emails)
   }

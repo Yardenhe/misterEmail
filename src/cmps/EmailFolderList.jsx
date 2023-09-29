@@ -1,19 +1,24 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faInbox, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { faStar, faClock, faPaperPlane, faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import { faStar, faClock, faPaperPlane, faTrashCan, faFile } from '@fortawesome/free-regular-svg-icons'
+import { utilService } from "../services/util.service"
 
 
 export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }) {
+
+
     const sidebarItems = [
         { icon: faInbox, label: 'Inbox' },
         { icon: faStar, label: 'Star' },
-        { icon: faClock, label: 'Snoozed' },
+        // { icon: faClock, label: 'Snoozed' },
         { icon: faPaperPlane, label: 'Sent' },
+        { icon: faFile, label: 'Drafts' },
         { icon: faTrashCan, label: 'Trash' },
     ]
     const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
     const [clicked, setClicked] = useState('Inbox')
+    const elSideBar = useRef()
 
     useEffect(() => {
         onSetFilter(filterByToEdit)
@@ -31,17 +36,23 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
 
 
     return (
-        <section className={"email-sidebar" + (openMenu ? " slide-in" : " slide-out")}>
+        <section className={"email-sidebar"}>
             {sidebarItems.map((item) => (
-                <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ")} key={item.label}>
-                    <FontAwesomeIcon className="FontAwesomeIcon" icon={item.icon} />
-                    <input
-                        type="button"
-                        value={item.label}
-                        name="status"
-                        onClick={(target) => { setClicked(item.label), handleChange(target) }}
-                    />
-                    {item.label === 'Inbox' && unreadCount}
+                <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ") + (openMenu ? " slide-in" : " slide-out")} key={item.label}>
+                    <label>
+                        <FontAwesomeIcon className="FontAwesomeIcon" icon={item.icon} />
+                        <input
+                            type="button"
+                            className={"input-item" + (openMenu ? " " : " hide-input")}
+                            value={item.label}
+                            name="status"
+                            onClick={(target) => {
+                                setClicked(item.label);
+                                handleChange(target);
+                            }}
+                        />
+                    </label>
+                    {item.label === 'Inbox' && openMenu ? unreadCount : null}
                 </section>
             ))
             }

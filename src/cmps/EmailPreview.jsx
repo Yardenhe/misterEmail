@@ -3,8 +3,11 @@ import { Link } from "react-router-dom"
 import { emailService } from "../services/email.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-icons'
+import { utilService } from "../services/util.service"
+
 
 export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
+
 
   const [star, setStar] = useState(email.isStarred)
   const [isRead, setisRead] = useState(email.isRead)
@@ -21,7 +24,6 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
       isRead: !email.isRead
     }
     onUpdateEmail(updatedEmail)
-
   }
   function onToggleStar() {
     setStar((star) => !star)
@@ -33,32 +35,8 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
 
   }
 
-  function formatDate(dateString) {
-    const date = new Date(dateString)
-    const now = new Date()
 
-    if (date.toDateString() === now.toDateString()) {
-      // If the date is today, format it as a clock (e.g., "3 pm")
-      const hours = date.getHours()
-      const minutes = date.getMinutes()
-      const period = hours >= 12 ? "pm" : "am"
-      const formattedHours = hours % 12 === 0 ? 12 : hours % 12
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-      return `${formattedHours}:${formattedMinutes} ${period}`
-    } else if (date > now) {
-      // If the date is in the future, format it as a clock (e.g., "3 pm")
-      const hours = date.getHours()
-      const minutes = date.getMinutes()
-      const period = hours >= 12 ? "pm" : "am"
-      const formattedHours = hours % 12 === 0 ? 12 : hours % 12
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-      return `${formattedHours}:${formattedMinutes} ${period}`
-    } else {
-      // If the date is in the past, format it as a date (e.g., "5 September")
-      const options = { year: "numeric", month: "long", day: "numeric" }
-      return date.toLocaleDateString("en-US", options)
-    }
-  }
+
   async function onToggleTrash() {
     const updatedEmail = {
       ...email,
@@ -83,9 +61,9 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
       </section>
       <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={() => onToggleIsRead(false)}>
         <section className="main-mail">
-          <div>{email.from}</div>
+          <div>{email.from.split('@')[0]}</div>
           <div className="email-subject">{email.subject}</div>
-          <div className="sent-at">{formatDate(new Date(email.sentAt))}</div>
+          <div className="sent-at">{utilService.formatDate(new Date(email.sentAt))}</div>
         </section>
       </Link>
       <section className="icons">

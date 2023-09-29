@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { Dropdown } from "./Dropdown"
+import { useForm } from "../customHooks/useForm"
 
 
 export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+  // const [filterByToEdit, setFilterByToEdit] = useForm(filterBy, onSetFilter)
 
   useEffect(() => {
     onSetFilter(filterByToEdit)

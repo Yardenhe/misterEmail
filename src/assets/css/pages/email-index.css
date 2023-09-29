@@ -1,18 +1,21 @@
 .email-index{
     display: grid;
     grid-template-rows:auto 1fr;
-    grid-template-columns:minmax(100px, 1fr) 2fr;
+    grid-template-columns:minmax(100px, 256px) 2fr;
     grid-template-areas:
     "a h"
     "a m";
                     
     height: 100%;
     width: 100%;
-    gap: 6px;
-    
+    column-gap: 6px;
 }
 .header{
 grid-area: h;
+/* display: grid;
+    grid-auto-flow: row;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 256px auto; */
 }
 .aside{
 grid-area: a;
@@ -22,6 +25,10 @@ grid-area: a;
 }
 .aside-logo{
     grid-area: al;
+}
+.aside-close{
+  grid-template-columns:90px  2fr;
+  
 }
 
 @media screen and (max-width: 700px) {

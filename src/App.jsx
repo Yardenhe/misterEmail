@@ -16,7 +16,7 @@ export function App() {
   return (
     <Router>
       <section className="main-app">
-        <AppHeader />
+        {/* <AppHeader /> */}
 
         <main className="container">
           <Routes>

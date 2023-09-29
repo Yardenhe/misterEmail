@@ -2,11 +2,12 @@ import { useState, useEffect } from "react"
 import { emailService } from "../services/email.service"
 import { EmailList } from "../cmps/EmailList"
 import { EmailFilter } from "../cmps/EmailFilter"
-import { Compose } from "../cmps/Compose"
 import { EmailFolderList } from "../cmps/EmailFolderList"
 import { Logo } from "../cmps/logo"
-import { Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
+import { Outlet, useLocation, useNavigate, useParams, useSearchParams, Link } from "react-router-dom"
+import { eventBusService } from "../services/event-bus.service"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
 
 
 
@@ -18,11 +19,10 @@ export function EmailIndex() {
   const params = useParams()
   const navigate = useNavigate()
 
-  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(SearchParams))
+  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter())
 
   useEffect(() => {
     setSearchParams(filterBy)
-
     loadEmail()
     setCounter()
   }, [filterBy])
@@ -49,7 +49,7 @@ export function EmailIndex() {
     }
   }
   function onSetFilter(filterToUpdate) {
-
+    console.log(filterToUpdate)
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }))
   }
   async function onAddEmail(email) {
@@ -57,21 +57,20 @@ export function EmailIndex() {
       console.log("Send" + email)
       const addedEmail = await emailService.save(email)
       setEmails((prevEmails) => [addedEmail, ...prevEmails])
-
-      showSuccessMsg('Successfully send!')
+      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Successfully send!' })
       navigate("/email")
     } catch (err) {
       console.log("Had issues send email", err)
     }
   }
   async function onUpdateEmail(email) {
+
     try {
       const updatedEmail = await emailService.save(email)
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
-
       if (email.removedAt) {
-        setEmails(prevEmails => prevEmails.filter(email => email.id !== updatedEmail.id))
-        showErrorMsg('Conversation moved to trash!')
+        await loadEmail()
+        eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
       }
 
     } catch (error) {
@@ -84,7 +83,7 @@ export function EmailIndex() {
       console.log("remove" + emailId)
       await emailService.remove(emailId)
       setEmails((prevEmails) => prevEmails.filter(email => email.id !== emailId))
-      showSuccessMsg('Conversation removed permanently!')
+      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation removed permanently!' })
       navigate("/email")
 
     } catch (err) {
@@ -95,19 +94,27 @@ export function EmailIndex() {
   if (!emails) return <div>Loading..</div>
   const { status, txt, isRead } = filterBy
   return (
-    <section className="email-index">
+    <section className={"email-index" + (openMenu ? " " : " aside-close ")}>
       <section className="header">
-        <EmailFilter
-          onSetFilter={onSetFilter}
-          filterBy={{ txt, isRead }}
-          onClickClearFilter={onClickClearFilter}
-        />
+
+        <section>
+          <EmailFilter
+            onSetFilter={onSetFilter}
+            filterBy={{ txt, isRead }}
+            onClickClearFilter={onClickClearFilter}
+          />
+        </section>
       </section>
       <section className="aside">
         <Logo setOpenMenu={setOpenMenu} />
-        <Compose user={emailService.getUser()} />
+        <Link to={`/email/compose`}>
+          <section className={"email-compose" + (openMenu ? " " : " compose-close")}>
+            <FontAwesomeIcon icon={faPencilAlt} className="pencil-icon" />
+            {openMenu && <h1>Compose</h1>}
+          </section>
+        </Link>
         <EmailFolderList onSetFilter={onSetFilter} openMenu={openMenu}
-          filterBy={{ status }} unreadCount={unreadCount} />
+          filterBy={status} unreadCount={unreadCount} />
       </section>
 
       {(!params.emailId) &&
