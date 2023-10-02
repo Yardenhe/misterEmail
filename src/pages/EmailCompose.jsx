@@ -21,17 +21,15 @@ export function EmailCompose() {
 
 
   useEffect(() => {
-
     const toParam = searchParams.get('to');
     const subjectParam = searchParams.get('subject');
-
-
     if (toParam) {
       setEmail((prev) => ({ ...prev, to: toParam }));
     }
     if (subjectParam) {
       setEmail((prev) => ({ ...prev, subject: subjectParam }));
     }
+
   }, [searchParams]);
 
   useEffect(() => {
@@ -61,7 +59,8 @@ export function EmailCompose() {
     }
   }, [])
   useEffect(() => {
-    count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ? onSaveDraftEmail(email) : null;
+    count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ?
+      SaveDraftEmail() : null;
   }, [count])
 
   function handleChange({ target }) {
@@ -78,34 +77,34 @@ export function EmailCompose() {
     setEmail((prevEmail) => ({ ...prevEmail, [field]: value }))
 
   }
-
+  async function SaveDraftEmail(isDraft) {
+    let save;
+    if (parms.emailId)
+      save = { ...email, id: parms.emailId }
+    !parms.emailId ? await onSaveDraftEmail(email, isDraft) : await onUpdateEmail(save, isDraft)
+  }
   async function onSendEmail(ev) {
     ev.preventDefault()
-    if (email.hasOwnProperty('id')) {
-      delete email.id;
-    }
-    onDeleteDraftEmail(email);
     try {
-      if (!parms.emailId) onAddEmail(email)
-      else onUpdateEmail(email);
+      SaveDraftEmail(false)
     } catch (err) {
       console.log("Had issues send email", err)
     }
   }
-  async function onSaveDraft() {
-    if (email.hasOwnProperty('id') && !parms.emailId) {
-      delete email.id;
-    }
-    onDeleteDraftEmail(email);
-    if (email.subject || email.body || email.to) {
-      try {
-        if (!parms.emailId) onAddEmail(email, true)
-        else onUpdateEmail(email, true);
-      } catch (err) {
-        console.log("Had issues send email", err)
-      }
-    }
-  }
+  // async function onSaveDraft() {
+  //   // if (email.hasOwnProperty('id') && !parms.emailId) {
+  //   //   delete email.id;
+  //   // }
+  //   // onDeleteDraftEmail(email);
+  //   // if (email.subject || email.body || email.to) {
+  //   //   try {
+  //   //     if (!parms.emailId) onAddEmail(email, true)
+  //   //     else onUpdateEmail(email, true);
+  //   //   } catch (err) {
+  //   //     console.log("Had issues send email", err)
+  //   //   }
+  //   // }
+  // }
   function DynamicStyle() {
     switch (type) {
       case 'normal':
@@ -131,7 +130,7 @@ export function EmailCompose() {
           {type === 'minimized' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrl} alt="" />}
           {type === 'fullscreen' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrlarrowin} alt="" />}
 
-          <Link to="/email" onClick={() => onSaveDraft()}>
+          <Link to="/email">
             <FontAwesomeIcon icon={faX} className="msg-icon" />
           </Link>
         </section>

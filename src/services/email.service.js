@@ -82,7 +82,7 @@ function save(emailToSave) {
   }
 }
 async function update(email) {
-  await storageService.put(STORAGE_KEY, email)
+  return await  storageService.put(STORAGE_KEY, email);
 }
 function getDefaultFilter() {
   return {

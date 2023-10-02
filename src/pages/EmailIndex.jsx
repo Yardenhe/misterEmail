@@ -59,7 +59,7 @@ export function EmailIndex() {
     try {
       console.log("Send" + email)
       let addedEmail = await emailService.save(email)
-      isDraft ? addedEmail = await emailService.save({ ...addedEmail, sentAt: null }) : null
+      //isDraft ? addedEmail = await emailService.save({ ...addedEmail, sentAt: null }) : null
       setEmails((prevEmails) => [addedEmail, ...prevEmails])
       eventBusService.emit('show-user-msg', { type: 'success', txt: isDraft ? 'Draft save!' : 'Successfully send!' });
       navigate("/email")
@@ -67,16 +67,16 @@ export function EmailIndex() {
       console.log("Had issues send email", err)
     }
   }
-  async function onSaveDraftEmail(email) {
+  async function onSaveDraftEmail(email, isDraft = true) {
     try {
       let addedEmail = await emailService.save(email)
-      addedEmail = await emailService.save({ ...addedEmail, sentAt: null })
+      isDraft ? addedEmail = await emailService.update({ ...addedEmail, sentAt: null }) : null;
       emails.some((item) => {
         return item.id === addedEmail.id
       }) ?
         setEmails(prevEmails => prevEmails.map(newEmail => newEmail.id === addedEmail.id ? addedEmail : newEmail)) :
         setEmails((prevEmails) => [addedEmail, ...prevEmails])
-      navigate(`/email/compose/${addedEmail.id}`)
+      isDraft ? navigate(`/email/compose/${addedEmail.id}`) : navigate("/email")
     } catch (err) {
       console.log("Had issues send email", err)
     }
@@ -84,7 +84,7 @@ export function EmailIndex() {
   async function onDeleteDraftEmail(email) {
     setEmails((prevEmails) => prevEmails.filter(prevemail => prevemail.id !== email.id))
   }
-  async function onUpdateEmail(email, isDraft = false) {
+  async function onUpdateEmail(email, isDraft = true) {
     try {
       let updatedEmail = await emailService.save(email)
       isDraft ? updatedEmail = await emailService.save({ ...updatedEmail, sentAt: null }) : null
@@ -93,6 +93,7 @@ export function EmailIndex() {
         await loadEmail()
         eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
       }
+      !isDraft ? navigate("/email") : null;
     } catch (error) {
       console.log(error)
     }
