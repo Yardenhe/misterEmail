@@ -1,11 +1,12 @@
 .logo{
+   
     display: grid;
     grid-auto-flow:column;
     justify-content: start;
     align-items: center;
     padding: 1em;
     color: rgb(65, 65, 65);
-    /* font-weight: bold; */
+    min-width: 200px;
     
 }
 .menu-icon{

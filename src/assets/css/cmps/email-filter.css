@@ -15,7 +15,9 @@
   border: 1px solid #ccc;
   border-radius: 20px;
   padding: 7px;
- 
+ width: 1h;
+ margin-left: 100px;
+ margin-right: 100px;
 }
 
 .email-filter input[type="text"]{

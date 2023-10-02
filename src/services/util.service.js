@@ -4,7 +4,8 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     animateCSS,
-    formatDate
+    formatDate,
+    formatSenderName
 }
 
 function makeId(length = 5) {
@@ -62,4 +63,21 @@ function animateCSS(el, animation, isRemoveClass = true) {
 
         el.addEventListener('animationend', handleAnimationEnd, { once: true })
     })
+}
+function formatSenderName(emailFrom) {
+  if (emailFrom) {
+    const atIndex = emailFrom.indexOf('@');
+    if (atIndex !== -1) {
+    
+      const namePart = emailFrom.substring(0, atIndex);
+    
+      return namePart.replace(/<[^>]*>/g, '').trim();
+    } else {
+     
+      return emailFrom;
+    }
+  } else {
+    // Handle the case where emailFrom is undefined.
+    return 'Unknown Sender';
+  }
 }

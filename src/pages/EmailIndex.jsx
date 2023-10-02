@@ -8,18 +8,20 @@ import { Outlet, useLocation, useNavigate, useParams, useSearchParams, Link } fr
 import { eventBusService } from "../services/event-bus.service"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
+import { utilService } from "../services/util.service"
 
 
 
 export function EmailIndex() {
-  const [SearchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [emails, setEmails] = useState(null)
   const [openMenu, setOpenMenu] = useState(true)
   const [unreadCount, setUnreadCount] = useState(0)
+  const [draftId, setdraftId] = useState(utilService.makeId())
   const params = useParams()
   const navigate = useNavigate()
 
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter())
+  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams))
 
   useEffect(() => {
     setSearchParams(filterBy)
@@ -52,19 +54,33 @@ export function EmailIndex() {
     console.log(filterToUpdate)
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }))
   }
-  async function onAddEmail(email) {
+  async function onAddEmail(email, isDraft = false) {
     try {
       console.log("Send" + email)
-      const addedEmail = await emailService.save(email)
+      let addedEmail = await emailService.save(email)
+      isDraft ? addedEmail = await emailService.save({ ...addedEmail, sentAt: null }) : null
       setEmails((prevEmails) => [addedEmail, ...prevEmails])
-      eventBusService.emit('show-user-msg', { type: 'success', txt: 'Successfully send!' })
+      eventBusService.emit('show-user-msg', { type: 'success', txt: isDraft ? 'Draft save!' : 'Successfully send!' });
       navigate("/email")
     } catch (err) {
       console.log("Had issues send email", err)
     }
   }
+  async function onDraftEmail(email) {
+    try {
+      emails.some((item) => {
+        return item.id === email.id
+      }) ?
+        setEmails(prevEmails => prevEmails.map(newEmail => newEmail.id === email.id ? email : newEmail)) :
+        setEmails((prevEmails) => [email, ...prevEmails])
+    } catch (err) {
+      console.log("Had issues send email", err)
+    }
+  }
+  async function onDeleteDraftEmail(email) {
+    setEmails((prevEmails) => prevEmails.filter(prevemail => prevemail.id !== email.id))
+  }
   async function onUpdateEmail(email) {
-
     try {
       const updatedEmail = await emailService.save(email)
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
@@ -105,23 +121,27 @@ export function EmailIndex() {
           />
         </section>
       </section>
+
       <section className="aside">
+
         <Logo setOpenMenu={setOpenMenu} />
-        <Link to={`/email/compose`}>
+
+
+        <Link to={`/email/compose`} >
           <section className={"email-compose" + (openMenu ? " " : " compose-close")}>
             <FontAwesomeIcon icon={faPencilAlt} className="pencil-icon" />
             {openMenu && <h1>Compose</h1>}
           </section>
         </Link>
         <EmailFolderList onSetFilter={onSetFilter} openMenu={openMenu}
-          filterBy={status} unreadCount={unreadCount} />
+          filterBy={{ status }} unreadCount={unreadCount} />
       </section>
 
       {(!params.emailId) &&
         <section className="main">
           <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} />
         </section>}
-      <Outlet context={{ onAddEmail, onRemoveEmail }} />
+      <Outlet context={{ onAddEmail, onRemoveEmail, onDraftEmail, onDeleteDraftEmail }} />
 
     </section>
   )

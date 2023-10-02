@@ -37,6 +37,7 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
 
 
 
+
   async function onToggleTrash() {
     const updatedEmail = {
       ...email,
@@ -61,9 +62,10 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
       </section>
       <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={() => onToggleIsRead(false)}>
         <section className="main-mail">
-          <div>{email.from.split('@')[0]}</div>
+          <div>{utilService.formatSenderName(email.from)}</div>
           <div className="email-subject">{email.subject}</div>
-          <div className="sent-at">{utilService.formatDate(new Date(email.sentAt))}</div>
+          {!email.sentAt && <div className="draft">draft</div>}
+          {email.sentAt && <div className="sent-at">{utilService.formatDate(new Date(email.sentAt))}</div>}
         </section>
       </Link>
       <section className="icons">

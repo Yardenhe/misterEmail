@@ -18,16 +18,14 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
     ]
     const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
     const [clicked, setClicked] = useState('Inbox')
-    const elSideBar = useRef()
+
 
     useEffect(() => {
         onSetFilter(filterByToEdit)
-
     }, [filterByToEdit])
 
 
     function handleChange({ target }) {
-
 
         const { value, name: field } = target
 
@@ -36,7 +34,7 @@ export function EmailFolderList({ onSetFilter, filterBy, openMenu, unreadCount }
 
 
     return (
-        <section className={"email-sidebar"}>
+        <section className={"email-sidebar" + (openMenu ? " " : " slide-out-phone")}>
             {sidebarItems.map((item) => (
                 <section className={"sidebar-item" + (clicked == item.label ? " clicked" : " ") + (openMenu ? " slide-in" : " slide-out")} key={item.label}>
                     <label>

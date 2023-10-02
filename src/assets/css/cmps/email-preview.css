@@ -60,6 +60,9 @@
 .email-preview:hover .icons {
   display: flex;
 }
+.draft{
+  color: red;
+}
 
 .trash-icon,
 .envelope-icon {

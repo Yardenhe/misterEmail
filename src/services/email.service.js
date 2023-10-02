@@ -13,7 +13,8 @@ export const emailService = {
   getUser,
   getFilterFromParams,
   emailCounter,
-  getEmailShape
+  getEmailShape,
+  
 }
 
 const STORAGE_KEY = "emails"
@@ -73,6 +74,7 @@ function remove(id) {
 function save(emailToSave) {
   if (emailToSave.id) {
     return storageService.put(STORAGE_KEY, emailToSave)
+    
   } else {
     const email = createEmail(emailToSave)
     return storageService.post(STORAGE_KEY, email)
@@ -142,7 +144,7 @@ function _createEmails() {
   let emails = [];
    emails = utilService.loadFromStorage(STORAGE_KEY)
   if (!emails || !emails.length) {
-    const categories = ["Inbox", "Sent", "Star", "Drafts"];
+    const categories = ["Inbox", "Sent", "Drafts"];
     const senderNames = [
       "JohnDoe",
       "JaneSmith",

@@ -1,6 +1,6 @@
 .email-index{
     display: grid;
-    grid-template-rows:auto 1fr;
+    grid-template-rows:auto 1fr ;
     grid-template-columns:minmax(100px, 256px) 2fr;
     grid-template-areas:
     "a h"
@@ -25,6 +25,7 @@ grid-area: a;
 }
 .aside-logo{
     grid-area: al;
+    min-width: 200px;
 }
 .aside-close{
   grid-template-columns:90px  2fr;
