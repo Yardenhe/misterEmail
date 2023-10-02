@@ -35,9 +35,6 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
 
   }
 
-
-
-
   async function onToggleTrash() {
     const updatedEmail = {
       ...email,
@@ -60,7 +57,10 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
       <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={() => onToggleStar()}>
         <FontAwesomeIcon icon={faStar} />
       </section>
-      <Link to={`/email/details/${email.id}`} className="main-mail-link" onClick={() => onToggleIsRead(false)}>
+      <Link
+        to={email.sentAt ? `/email/details/${email.id}` : `/email/compose/${email.id}`}
+        className="main-mail-link"
+        onClick={() => onToggleIsRead(false)}>
         <section className="main-mail">
           <div>{utilService.formatSenderName(email.from)}</div>
           <div className="email-subject">{email.subject}</div>

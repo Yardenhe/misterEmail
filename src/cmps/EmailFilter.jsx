@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { Dropdown } from "./Dropdown"
 import { useForm } from "../customHooks/useForm"
 
@@ -66,6 +66,8 @@ export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
         <Dropdown handleChange={handleChange} onClickClearFilter={onClickClearFilter} />
         <FontAwesomeIcon className="filter-icon" icon={faArrowRotateRight} />
         <FontAwesomeIcon className="filter-icon" icon={faEllipsisV} />
+        <FontAwesomeIcon className="filter-icon" icon={faQuestion} />
+
       </section>
       <section className="under-filter">
         <section className="tags-under-filter">

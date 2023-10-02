@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { emailService } from "../services/email.service"
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faX, } from "@fortawesome/free-solid-svg-icons"
@@ -11,13 +11,44 @@ import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.p
 import { utilService } from "../services/util.service"
 
 export function EmailCompose() {
-  const { onAddEmail, onDraftEmail, onDeleteDraftEmail } = useOutletContext()
-  const [email, setEmail] = useState({ id: utilService.makeId() });
+  const { onAddEmail, onSaveDraftEmail, onDeleteDraftEmail, onUpdateEmail } = useOutletContext()
+  const [email, setEmail] = useState(emailService.getEmptyEmail());
+  const parms = useParams();
   const [type, setType] = useState("normal");
   const [count, setCount] = useState(0)
   const intervalIdRef = useRef()
+  const [searchParams, setSearchParams] = useSearchParams();
 
 
+  useEffect(() => {
+
+    const toParam = searchParams.get('to');
+    const subjectParam = searchParams.get('subject');
+
+
+    if (toParam) {
+      setEmail((prev) => ({ ...prev, to: toParam }));
+    }
+    if (subjectParam) {
+      setEmail((prev) => ({ ...prev, subject: subjectParam }));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (parms.emailId)
+      loadEmail()
+
+  }, [])
+
+  async function loadEmail() {
+    try {
+      const email = await emailService.getById(parms.emailId)
+      setEmail(email)
+    } catch (err) {
+      navigate("/email")
+
+    }
+  }
 
   useEffect(() => {
     console.log('Counter Mounted' + count)
@@ -30,7 +61,7 @@ export function EmailCompose() {
     }
   }, [])
   useEffect(() => {
-    count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ? onDraftEmail(email) : null;
+    count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ? onSaveDraftEmail(email) : null;
   }, [count])
 
   function handleChange({ target }) {
@@ -55,19 +86,21 @@ export function EmailCompose() {
     }
     onDeleteDraftEmail(email);
     try {
-      onAddEmail(email)
+      if (!parms.emailId) onAddEmail(email)
+      else onUpdateEmail(email);
     } catch (err) {
       console.log("Had issues send email", err)
     }
   }
   async function onSaveDraft() {
-    if (email.hasOwnProperty('id')) {
+    if (email.hasOwnProperty('id') && !parms.emailId) {
       delete email.id;
     }
     onDeleteDraftEmail(email);
     if (email.subject || email.body || email.to) {
       try {
-        onAddEmail(email, true)
+        if (!parms.emailId) onAddEmail(email, true)
+        else onUpdateEmail(email, true);
       } catch (err) {
         console.log("Had issues send email", err)
       }
@@ -85,8 +118,9 @@ export function EmailCompose() {
         return 'normal'
     }
   }
+  const { to, from, subject, body } = email
 
-
+  if (!email) return <section> Loading... </section>
   return (
     <form className={`email-Compose-form  ${DynamicStyle()}`}>
       <section className="header-compose">
@@ -108,6 +142,7 @@ export function EmailCompose() {
           type="email"
           id="to"
           name="to"
+          value={to || ''}
           onChange={handleChange}
           required
         />
@@ -118,6 +153,7 @@ export function EmailCompose() {
           type="email"
           id="from"
           name="from"
+          value={from || ''}
           //value={Parms.email}
           onChange={handleChange}
           required
@@ -130,13 +166,14 @@ export function EmailCompose() {
           type="text"
           id="subject"
           name="subject"
+          value={subject || ''}
           onChange={handleChange}
           required
         />
       </div>
       <div className="form-compose">
 
-        <textarea id="body" name="body" onChange={handleChange} required />
+        <textarea id="body" name="body" value={body || ''} onChange={handleChange} required />
       </div>
       <button onClick={onSendEmail}>Send</button>
     </form>

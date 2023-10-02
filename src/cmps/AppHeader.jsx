@@ -8,11 +8,13 @@ export function AppHeader() {
 
 
       <nav>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/about">About</NavLink>
-        <NavLink to="/email">Email</NavLink>
+        <NavLink to="/"><span>Home</span></NavLink>
+        <NavLink to="/about"><span>About</span></NavLink>
+        <NavLink to="/email"><span>Email</span></NavLink>
       </nav>
-
+      <Link to="/email/compose?to=help@gmail.com&subject=Help">
+        <h1>help ?</h1>
+      </Link>
     </header>
   );
 }

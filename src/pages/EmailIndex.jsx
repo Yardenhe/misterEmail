@@ -24,7 +24,8 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams))
 
   useEffect(() => {
-    setSearchParams(filterBy)
+    if (!searchParams.get("help"))
+      setSearchParams(filterBy)
     loadEmail()
     setCounter()
   }, [filterBy])
@@ -66,13 +67,16 @@ export function EmailIndex() {
       console.log("Had issues send email", err)
     }
   }
-  async function onDraftEmail(email) {
+  async function onSaveDraftEmail(email) {
     try {
+      let addedEmail = await emailService.save(email)
+      addedEmail = await emailService.save({ ...addedEmail, sentAt: null })
       emails.some((item) => {
-        return item.id === email.id
+        return item.id === addedEmail.id
       }) ?
-        setEmails(prevEmails => prevEmails.map(newEmail => newEmail.id === email.id ? email : newEmail)) :
-        setEmails((prevEmails) => [email, ...prevEmails])
+        setEmails(prevEmails => prevEmails.map(newEmail => newEmail.id === addedEmail.id ? addedEmail : newEmail)) :
+        setEmails((prevEmails) => [addedEmail, ...prevEmails])
+      navigate(`/email/compose/${addedEmail.id}`)
     } catch (err) {
       console.log("Had issues send email", err)
     }
@@ -80,15 +84,15 @@ export function EmailIndex() {
   async function onDeleteDraftEmail(email) {
     setEmails((prevEmails) => prevEmails.filter(prevemail => prevemail.id !== email.id))
   }
-  async function onUpdateEmail(email) {
+  async function onUpdateEmail(email, isDraft = false) {
     try {
-      const updatedEmail = await emailService.save(email)
+      let updatedEmail = await emailService.save(email)
+      isDraft ? updatedEmail = await emailService.save({ ...updatedEmail, sentAt: null }) : null
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
       if (email.removedAt) {
         await loadEmail()
         eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
       }
-
     } catch (error) {
       console.log(error)
     }
@@ -141,7 +145,7 @@ export function EmailIndex() {
         <section className="main">
           <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} />
         </section>}
-      <Outlet context={{ onAddEmail, onRemoveEmail, onDraftEmail, onDeleteDraftEmail }} />
+      <Outlet context={{ onAddEmail, onRemoveEmail, onSaveDraftEmail, onDeleteDraftEmail, onUpdateEmail }} />
 
     </section>
   )

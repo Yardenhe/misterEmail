@@ -14,6 +14,7 @@ export const emailService = {
   getFilterFromParams,
   emailCounter,
   getEmailShape,
+  getEmptyEmail
   
 }
 
@@ -87,7 +88,7 @@ function getDefaultFilter() {
   return {
     status: "Inbox",
     txt: "",
-    isRead: null,
+    isRead: '',
   }
 }
 function getUser(){
@@ -125,6 +126,19 @@ function createEmail(emailToSave) {
     removedAt: null,
     from: emailToSave.from,
     to: emailToSave.to,
+  }
+}
+function getEmptyEmail() {
+  return {
+    id: '',
+    subject: '',
+    body: '',
+    isRead: false,
+    isStarred: false,
+    sentAt:  '',
+    removedAt: null,
+    from: '',
+    to: '',
   }
 }
 function getEmailShape() {
