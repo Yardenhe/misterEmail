@@ -16,6 +16,6 @@ export function EmailList({ emails, onUpdateEmail, setUnreadCount }) {
     </ul>
   )
 }
-EmailList.propTypes = {
-  emails: PropTypes.arrayOf(emailService.getEmailShape())
-}
+// EmailList.propTypes = {
+//   emails: PropTypes.arrayOf(emailService.getEmailShape())
+// }

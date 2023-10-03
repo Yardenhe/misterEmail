@@ -11,7 +11,7 @@ import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.p
 import { utilService } from "../services/util.service"
 
 export function EmailCompose() {
-  const { onAddEmail, onSaveDraftEmail, onDeleteDraftEmail, onUpdateEmail } = useOutletContext()
+  const { onAddEmail } = useOutletContext()
   const [email, setEmail] = useState(emailService.getEmptyEmail());
   const parms = useParams();
   const [type, setType] = useState("normal");
@@ -60,7 +60,7 @@ export function EmailCompose() {
   }, [])
   useEffect(() => {
     count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ?
-      SaveDraftEmail() : null;
+      onSaveDraft(true) : null;
   }, [count])
 
   function handleChange({ target }) {
@@ -77,34 +77,21 @@ export function EmailCompose() {
     setEmail((prevEmail) => ({ ...prevEmail, [field]: value }))
 
   }
-  async function SaveDraftEmail(isDraft) {
+  async function onSaveDraft(isDraft) {
     let save;
     if (parms.emailId)
       save = { ...email, id: parms.emailId }
-    !parms.emailId ? await onSaveDraftEmail(email, isDraft) : await onUpdateEmail(save, isDraft)
+    !parms.emailId ? await onAddEmail(email, isDraft) : await onAddEmail(save, isDraft)
   }
   async function onSendEmail(ev) {
     ev.preventDefault()
     try {
-      SaveDraftEmail(false)
+      await onSaveDraft(false)
     } catch (err) {
       console.log("Had issues send email", err)
     }
   }
-  // async function onSaveDraft() {
-  //   // if (email.hasOwnProperty('id') && !parms.emailId) {
-  //   //   delete email.id;
-  //   // }
-  //   // onDeleteDraftEmail(email);
-  //   // if (email.subject || email.body || email.to) {
-  //   //   try {
-  //   //     if (!parms.emailId) onAddEmail(email, true)
-  //   //     else onUpdateEmail(email, true);
-  //   //   } catch (err) {
-  //   //     console.log("Had issues send email", err)
-  //   //   }
-  //   // }
-  // }
+
   function DynamicStyle() {
     switch (type) {
       case 'normal':
@@ -174,7 +161,7 @@ export function EmailCompose() {
 
         <textarea id="body" name="body" value={body || ''} onChange={handleChange} required />
       </div>
-      <button onClick={onSendEmail}>Send</button>
+      <button onClick={(ev) => onSendEmail(ev)}>Send</button>
     </form>
   )
 }

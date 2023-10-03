@@ -57,7 +57,7 @@ async function query(filterBy) {
       {
         return false
       }
-      if(status==="Inbox"&&email.removedAt)
+      if(status==="Inbox"&&(email.removedAt||!email.sentAt))
       {
         return false
       }
