@@ -38,7 +38,7 @@ export function EmailDetails() {
           onDeleteEmail(email.id)
         }}
       >
-        X
+        Delete email permanently!
       </button>
       <Link to="/email">GoBack</Link>
     </section>

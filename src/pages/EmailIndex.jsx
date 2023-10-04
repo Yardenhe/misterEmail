@@ -12,6 +12,7 @@ import { utilService } from "../services/util.service"
 
 
 
+
 export function EmailIndex() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [emails, setEmails] = useState(null)
@@ -24,7 +25,7 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams))
 
   useEffect(() => {
-    if (!searchParams.get("help"))
+    if (!searchParams.get("to"))
       setSearchParams(filterBy)
     loadEmail()
     setCounter()
@@ -143,8 +144,10 @@ export function EmailIndex() {
       <section className="main">
         <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} />
       </section>
+
       {/* //} */}
       <Outlet context={{ onAddEmail, onRemoveEmail, onUpdateEmail }} />
+
 
     </section>
   )

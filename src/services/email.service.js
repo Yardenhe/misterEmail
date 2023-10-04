@@ -14,7 +14,8 @@ export const emailService = {
   getFilterFromParams,
   emailCounter,
   getEmailShape,
-  getEmptyEmail
+  getEmptyEmail,
+  getUserPos
   
 }
 
@@ -57,7 +58,7 @@ async function query(filterBy) {
       {
         return false
       }
-      if(status==="Inbox"&&(email.removedAt||!email.sentAt))
+      if(status==="Inbox"&&(email.removedAt||!email.sentAt||email.from===getUser().email))
       {
         return false
       }
@@ -93,7 +94,7 @@ function getDefaultFilter() {
 }
 function getUser(){
   const loggedinUser = {
-    email: "user@appsus.com",
+    email: "MahatmaAppsus@example.com",
     fullname: "Mahatma Appsus",
   }
   return loggedinUser
@@ -148,11 +149,22 @@ function getEmailShape() {
       body: PropTypes.string,
       isRead: PropTypes.bool,
       isStarred: PropTypes.bool,
-      sentAt: PropTypes.number,
-      removedAt: PropTypes.number,
+      sentAt: PropTypes.number||null,
+      removedAt: PropTypes.number||null,
       from: PropTypes.string,
       to: PropTypes.string
   })
+}
+function getUserPos() {
+  if (!navigator.geolocation) return;
+  return new Promise((resolve, reject) => {
+      return navigator.geolocation.getCurrentPosition(resolve, reject);
+  }).then(({ coords }) => {
+      return {
+          lat: coords.latitude,
+          lng: coords.longitude,
+      };
+  });
 }
 function _createEmails() {
   let emails = [];
@@ -170,6 +182,7 @@ function _createEmails() {
       "MichaelWilson",
       "OliviaMartinez",
       "JamesTaylor",
+      "MahatmaAppsus"
     ];
     
     const emailSubjects = [
@@ -202,7 +215,7 @@ function _createEmails() {
     for (let i = 1; i <= 50; i++) {
       const randomCategory = categories[Math.floor(Math.random() * categories.length)];
       const randomYear = Math.random() < 0.5 ? 2022 : 2023;
-      const randomMonth = Math.floor(Math.random() * 12) + 1; // 1-12
+      const randomMonth = Math.floor(Math.random() * 9) + 1; // 1-12
       const randomDay = Math.floor(Math.random() * 30) + 1; // 1-30
       const randomHour = Math.floor(Math.random() * 24); // 0-23
       const randomMinute = Math.floor(Math.random() * 60); // 0-59
@@ -218,8 +231,8 @@ function _createEmails() {
         isStarred: Math.random() < 0.3,
         sentAt: new Date(randomYear, randomMonth - 1, randomDay, randomHour, randomMinute).getTime(),
         removedAt: null,
-        from: `${randomSenderName}@example.com>`,
-        to: "user@appsus.com",
+        from: `${randomSenderName}@example.com`,
+        to: `user@example.com`,
         category: randomCategory,
       };
     

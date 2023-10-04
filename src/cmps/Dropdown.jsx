@@ -23,11 +23,11 @@ export function Dropdown({ handleChange, onClickClearFilter }) {
             {isOpen && (
                 <section className="dropdown-options">
                     <input type="button" name='All' value='All' placeholder='All' onClick={() => { onClickClearFilter(), handleOptionSelect() }} />
-                    <input type="button" name='None' value='None' onClick={() => handleOptionSelect('None')} />
+                    {/* <input type="button" name='None' value='None' onClick={() => handleOptionSelect('None')} /> */}
                     <input type="button" name='isRead' value='Read' onClick={(target) => { handleChange(target), handleOptionSelect('Read') }} />
                     <input type="button" name='Unread' value='Unread' onClick={(target) => { handleChange(target), handleOptionSelect('Unread') }} />
-                    <input type="button" name='isStarred' value='Starred' onClick={() => handleOptionSelect(' Starred')} />
-                    <input type="button" name='isstarred' value='Unstarred' onClick={() => handleOptionSelect(' Unstarred')} />
+                    {/* <input type="button" name='isStarred' value='Starred' onClick={() => handleOptionSelect(' Starred')} />
+                    <input type="button" name='isstarred' value='Unstarred' onClick={() => handleOptionSelect(' Unstarred')} /> */}
                 </section>
             )}
         </section>

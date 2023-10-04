@@ -1,11 +1,15 @@
 .email-details {
-  position: relative; /* Add this */
+  position: fixed; /* Add this */
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 20px;
+  left: 20em;
+  bottom: 25em;
+  width: 65em;
+  height: 20em;
 }
 
 .email-details > div {

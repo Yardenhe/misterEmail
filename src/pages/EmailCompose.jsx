@@ -1,20 +1,24 @@
 import { useState, useEffect, useRef } from "react"
-import { useNavigate, useOutletContext, useParams } from "react-router-dom"
+import { useOutletContext, useParams } from "react-router-dom"
 import { emailService } from "../services/email.service"
-import { useSearchParams, useLocation } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faX, } from "@fortawesome/free-solid-svg-icons"
+import { faX, faLocationPin } from "@fortawesome/free-solid-svg-icons"
 import imgUrl from "../assets/imgs/arrow-diagonal-svgrepo-com.png"
 import underline from "../assets/imgs/underline-1437-svgrepo-com.png"
 import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.png"
 import { utilService } from "../services/util.service"
+import { GoogleMap } from "../cmps/GoogleMap"
+import { useToggle } from "../customHooks/useToggle"
+
 
 export function EmailCompose() {
   const { onAddEmail } = useOutletContext()
   const [email, setEmail] = useState(emailService.getEmptyEmail());
   const parms = useParams();
   const [type, setType] = useState("normal");
+  const [isOpenMap, setIsOpenMap] = useState()
   const [count, setCount] = useState(0)
   const intervalIdRef = useRef()
   const [searchParams, setSearchParams] = useSearchParams();
@@ -108,14 +112,18 @@ export function EmailCompose() {
 
   if (!email) return <section> Loading... </section>
   return (
+
     <form className={`email-Compose-form  ${DynamicStyle()}`}>
+
       <section className="header-compose">
+
         <h3>New Message</h3>
         <section className="header-compose-icons">
           <img onClick={() => setType('minimized')} className="arrow-header-underline" src={underline} alt="" />
           {type === 'normal' && <img onClick={() => setType("fullscreen")} className="arrow-header-open" src={imgUrl} alt="" />}
           {type === 'minimized' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrl} alt="" />}
           {type === 'fullscreen' && <img onClick={() => setType("normal")} className="arrow-header-open" src={imgUrlarrowin} alt="" />}
+
 
           <Link to="/email">
             <FontAwesomeIcon icon={faX} className="msg-icon" />
@@ -157,11 +165,16 @@ export function EmailCompose() {
           required
         />
       </div>
+      {isOpenMap && <GoogleMap />}
       <div className="form-compose">
 
         <textarea id="body" name="body" value={body || ''} onChange={handleChange} required />
       </div>
-      <button onClick={(ev) => onSendEmail(ev)}>Send</button>
+      <section className="flex align-center">
+        <button onClick={(ev) => onSendEmail(ev)}>Send</button>
+        <section onClick={() => setIsOpenMap(!isOpenMap)}> <FontAwesomeIcon icon={faLocationPin} className="msg-icon" /></section>
+      </section>
+
     </form>
   )
 }

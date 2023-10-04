@@ -6,6 +6,7 @@ import { faStar, faTrashCan, faEnvelope } from '@fortawesome/free-regular-svg-ic
 import { utilService } from "../services/util.service"
 
 
+
 export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
 
 
@@ -62,7 +63,8 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
         className="main-mail-link"
         onClick={() => onToggleIsRead(false)}>
         <section className="main-mail">
-          <div>{utilService.formatSenderName(email.from)}</div>
+          {emailService.getUser().email === email.from ? <div>To:{utilService.formatSenderName(email.to)}</div>
+            : <div>{utilService.formatSenderName(email.from)}</div>}
           <div className="email-subject">{email.subject}</div>
           {!email.sentAt && <div className="draft">draft</div>}
           {email.sentAt && <div className="sent-at">{utilService.formatDate(new Date(email.sentAt))}</div>}
