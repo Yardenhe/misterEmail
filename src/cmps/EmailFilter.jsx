@@ -3,39 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faArrowRotateRight, faEllipsisV, faInbox, faTag, faUsers, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { Dropdown } from "./Dropdown"
 import { useForm } from "../customHooks/useForm"
+import { useEffectUpdate } from "../customHooks/useEffectUpdate"
 
 
 export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
-  const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
-  // const [filterByToEdit, setFilterByToEdit] = useForm(filterBy, onSetFilter)
+  const [filterByToEdit, handleChange] = useForm(filterBy, onSetFilter)
 
-  useEffect(() => {
+  useEffectUpdate(() => {
     onSetFilter(filterByToEdit)
   }, [filterByToEdit])
 
-  function handleChange({ target }) {
-    var { value, name: field } = target
-    switch (target.type) {
-      case "range":
-      case "number":
-        value = +target.value || 0
-        break
-      case "checkbox":
-        value = target.checked
-        break
-      case "button":
-        if (target.name === "isRead") {
-          value = true
-        } else if (target.name === "Unread") {
-          {
-            field = "isRead"
-            value = false
-          }
-        }
-        break
-    }
-    setFilterByToEdit((prevUser) => ({ ...prevUser, [field]: value }))
-  }
+
   function onSubmitFilter(ev) {
     ev.preventDefault()
     onSetFilter(filterByToEdit)

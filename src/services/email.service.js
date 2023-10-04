@@ -144,15 +144,15 @@ function getEmptyEmail() {
 }
 function getEmailShape() {
   return PropTypes.shape({
-      id: PropTypes.string,
-      subject: PropTypes.string,
-      body: PropTypes.string,
+      id: PropTypes.string || '',
+      subject: PropTypes.string|| '',
+      body: PropTypes.string|| '',
       isRead: PropTypes.bool,
       isStarred: PropTypes.bool,
       sentAt: PropTypes.number||null,
       removedAt: PropTypes.number||null,
-      from: PropTypes.string,
-      to: PropTypes.string
+      from: PropTypes.string|| '',
+      to: PropTypes.string|| ''
   })
 }
 function getUserPos() {

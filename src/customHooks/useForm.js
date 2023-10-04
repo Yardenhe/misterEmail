@@ -20,6 +20,17 @@ export function useForm(initialState, callBack) {
                 break;
             case 'checkbox':
                 value = target.checked
+                break;
+            case "button":
+                    if (target.name === "isRead") {
+                    value = true
+                    } else if (target.name === "Unread") {
+                    {
+                        field = "isRead"
+                        value = false
+                    }
+                    }
+        break
             default:
                 break;
         }
