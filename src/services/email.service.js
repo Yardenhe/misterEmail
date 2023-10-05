@@ -58,7 +58,7 @@ async function query(filterBy) {
       {
         return false
       }
-      if(status==="Inbox"&&(email.removedAt||!email.sentAt||email.from===getUser().email))
+      if(status==="Inbox"&&(email.removedAt||!email.sentAt||email.from==getUser().email))
       {
         return false
       }
@@ -94,7 +94,7 @@ function getDefaultFilter() {
 }
 function getUser(){
   const loggedinUser = {
-    email: "MahatmaAppsus@example.com",
+    email:"MahatmaAppsus@example.com",
     fullname: "Mahatma Appsus",
   }
   return loggedinUser

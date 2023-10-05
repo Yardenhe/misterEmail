@@ -7,12 +7,10 @@ import { utilService } from "../services/util.service"
 
 
 
-export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
-
+export default function EmailPreview({ email, onUpdateEmail, setUnreadCount, handleChangeSelect }) {
 
   const [star, setStar] = useState(email.isStarred)
   const [isRead, setisRead] = useState(email.isRead)
-
 
   function onToggleIsRead(isIcon) {
     setisRead((isRead) => !isRead)
@@ -35,7 +33,6 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
     onUpdateEmail(updatedEmail)
 
   }
-
   async function onToggleTrash() {
     const updatedEmail = {
       ...email,
@@ -44,16 +41,17 @@ export default function EmailPreview({ email, onUpdateEmail, setUnreadCount }) {
     onUpdateEmail(updatedEmail)
 
   }
+
   return (
     <article
       className={"email-preview unread" + (isRead ? "unread" : " ")}
     >
-
       <input
         type="checkbox"
         name="selectEmail"
         placeholder="selectEmail"
-      // onChange={handleChange}
+        checked={email.checked || false}
+        onChange={() => handleChangeSelect(email.id)}
       />
       <section className={"star-icon" + (star ? " clicked-star" : " ")} onClick={() => onToggleStar()}>
         <FontAwesomeIcon icon={faStar} />

@@ -6,7 +6,7 @@ import { useForm } from "../customHooks/useForm"
 import { useEffectUpdate } from "../customHooks/useEffectUpdate"
 
 
-export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
+export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter, toggleSelectAll }) {
   const [filterByToEdit, handleChange] = useForm(filterBy, onSetFilter)
 
   useEffectUpdate(() => {
@@ -35,10 +35,10 @@ export function EmailFilter({ onSetFilter, filterBy, onClickClearFilter }) {
 
         <input
           type="checkbox"
-          id="isRead"
-          name="isRead"
-          placeholder="isRead"
-        // onChange={handleChange}
+          id="selectAll"
+          name="selectAll"
+          placeholder="selectAll"
+          onChange={toggleSelectAll}
         />
 
         <Dropdown handleChange={handleChange} onClickClearFilter={onClickClearFilter} />

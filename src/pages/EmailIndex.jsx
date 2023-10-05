@@ -4,25 +4,20 @@ import { EmailList } from "../cmps/EmailList"
 import { EmailFilter } from "../cmps/EmailFilter"
 import { EmailFolderList } from "../cmps/EmailFolderList"
 import { Logo } from "../cmps/logo"
-import { Outlet, useLocation, useNavigate, useParams, useSearchParams, Link } from "react-router-dom"
+import { Outlet, useNavigate, useParams, useSearchParams, Link } from "react-router-dom"
 import { eventBusService } from "../services/event-bus.service"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
 import { utilService } from "../services/util.service"
-
-
-
 
 export function EmailIndex() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [emails, setEmails] = useState(null)
   const [openMenu, setOpenMenu] = useState(true)
   const [unreadCount, setUnreadCount] = useState(0)
-  const [draftId, setdraftId] = useState(utilService.makeId())
-  const params = useParams()
   const navigate = useNavigate()
-
   const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams))
+  const [selectedAll, setSelectedAll] = useState(null);
 
   useEffect(() => {
     if (!searchParams.get("to"))
@@ -42,23 +37,10 @@ export function EmailIndex() {
       console.log('Had issues loading emails', err)
     }
   }
-
   function onSetFilter(filterToUpdate) {
     console.log(filterToUpdate)
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterToUpdate }))
   }
-  // async function onAddEmail(email, isDraft = false) {
-  //   try {
-  //     console.log("Send" + email)
-  //     let addedEmail = await emailService.save(email)
-  //     //isDraft ? addedEmail = await emailService.save({ ...addedEmail, sentAt: null }) : null
-  //     setEmails((prevEmails) => [addedEmail, ...prevEmails])
-  //     eventBusService.emit('show-user-msg', { type: 'success', txt: isDraft ? 'Draft save!' : 'Successfully send!' });
-  //     navigate("/email")
-  //   } catch (err) {
-  //     console.log("Had issues send email", err)
-  //   }
-  // }
   async function onAddEmail(email, isDraft = true) {
     try {
       let addedEmail = await emailService.save(email)
@@ -110,26 +92,37 @@ export function EmailIndex() {
       console.log('Had issues loading emails', err)
     }
   }
+  function handleChangeSelect(emailId) {
+    const updatedEmails = emails.map((email) =>
+      email.id === emailId ? { ...email, checked: !email.checked } : email
+    );
+    setEmails(updatedEmails);
+    setSelectedAll(updatedEmails.every((email) => email.checked));
+  }
+  const toggleSelectAll = () => {
+    setSelectedAll(!selectedAll);
+    const updatedEmails = emails.map((email) => ({
+      ...email,
+      checked: !selectedAll,
+    }));
+    setEmails(updatedEmails);
+  };
   if (!emails) return <div>Loading..</div>
   const { status, txt, isRead } = filterBy
   return (
     <section className={"email-index" + (openMenu ? " " : " aside-close ")}>
       <section className="header">
-
         <section>
           <EmailFilter
             onSetFilter={onSetFilter}
             filterBy={{ txt, isRead }}
             onClickClearFilter={onClickClearFilter}
+            toggleSelectAll={toggleSelectAll}
           />
         </section>
       </section>
-
       <section className="aside">
-
         <Logo setOpenMenu={setOpenMenu} />
-
-
         <Link to={`/email/compose`} >
           <section className={"email-compose" + (openMenu ? " " : " compose-close")}>
             <FontAwesomeIcon icon={faPencilAlt} className="pencil-icon" />
@@ -142,13 +135,11 @@ export function EmailIndex() {
 
       {/* {(!params.emailId) && */}
       <section className="main">
-        <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} />
+        <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} handleChangeSelect={handleChangeSelect} />
       </section>
 
       {/* //} */}
       <Outlet context={{ onAddEmail, onRemoveEmail, onUpdateEmail }} />
-
-
     </section>
   )
 }

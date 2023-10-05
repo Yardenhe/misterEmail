@@ -4,13 +4,13 @@ import { emailService } from "../services/email.service"
 
 
 
-export function EmailList({ emails, onUpdateEmail, setUnreadCount }) {
+export function EmailList({ emails, onUpdateEmail, setUnreadCount, handleChangeSelect }) {
 
   return (
     <ul className="email-list">
       {emails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt)).map((email) => (
         <li key={email.id}>
-          <EmailPreview email={email} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} />
+          <EmailPreview email={email} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} handleChangeSelect={handleChangeSelect} />
         </li>
       ))}
     </ul>

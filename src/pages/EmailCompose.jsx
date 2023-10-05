@@ -8,9 +8,8 @@ import { faX, faLocationPin } from "@fortawesome/free-solid-svg-icons"
 import imgUrl from "../assets/imgs/arrow-diagonal-svgrepo-com.png"
 import underline from "../assets/imgs/underline-1437-svgrepo-com.png"
 import imgUrlarrowin from "../assets/imgs/arrow-diagonal-double-in-svgrepo-com.png"
-import { utilService } from "../services/util.service"
 import { GoogleMap } from "../cmps/GoogleMap"
-import { useToggle } from "../customHooks/useToggle"
+
 
 
 export function EmailCompose() {
@@ -34,24 +33,12 @@ export function EmailCompose() {
       setEmail((prev) => ({ ...prev, subject: subjectParam }));
     }
 
-  }, [searchParams]);
-
+  }, [searchParams])
   useEffect(() => {
     if (parms.emailId)
       loadEmail()
 
   }, [])
-
-  async function loadEmail() {
-    try {
-      const email = await emailService.getById(parms.emailId)
-      setEmail(email)
-    } catch (err) {
-      navigate("/email")
-
-    }
-  }
-
   useEffect(() => {
     console.log('Counter Mounted' + count)
     intervalIdRef.current = setInterval(() => {
@@ -66,7 +53,15 @@ export function EmailCompose() {
     count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ?
       onSaveDraft(true) : null;
   }, [count])
+  async function loadEmail() {
+    try {
+      const email = await emailService.getById(parms.emailId)
+      setEmail(email)
+    } catch (err) {
+      navigate("/email")
 
+    }
+  }
   function handleChange({ target }) {
     var { value, name: field } = target
     switch (target.type) {
@@ -95,7 +90,6 @@ export function EmailCompose() {
       console.log("Had issues send email", err)
     }
   }
-
   function DynamicStyle() {
     switch (type) {
       case 'normal':
@@ -108,6 +102,7 @@ export function EmailCompose() {
         return 'normal'
     }
   }
+
   const { to, from, subject, body } = email
 
   if (!email) return <section> Loading... </section>

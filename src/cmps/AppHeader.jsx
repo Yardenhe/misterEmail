@@ -1,12 +1,8 @@
 import { Link, NavLink } from "react-router-dom"
-import imgUrl from "../assets/imgs/gmail-logo.png"
 
 export function AppHeader() {
   return (
     <header className="app-header">
-
-
-
       <nav>
         <NavLink to="/"><span>Home</span></NavLink>
         <NavLink to="/about"><span>About</span></NavLink>

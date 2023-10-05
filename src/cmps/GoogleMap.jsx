@@ -6,9 +6,7 @@ import { faLocationPin } from "@fortawesome/free-solid-svg-icons"
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-
 export function GoogleMap() {
-
     const [coordinates, setCoordinates] = useState({ lat: 32.0853, lng: 34.7818 });
     const zoom = 11;
 
@@ -26,11 +24,7 @@ export function GoogleMap() {
         setCoordinates({ lat, lng })
     }
 
-
-
-
     return (
-        // Important! Always set the container height explicitly
         <div style={{ height: '10vh', width: '100%' }}>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyDZ_exO5x3MHAchKom7w1W0Vk7bgIQhQZ8" }}

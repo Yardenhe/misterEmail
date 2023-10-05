@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { emailService } from "../services/email.service"
 import { Link } from "react-router-dom"
-import { eventBusService } from "../services/event-bus.service"
+
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null)

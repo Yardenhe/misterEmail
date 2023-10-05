@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faX, } from "@fortawesome/free-solid-svg-icons"
 import { eventBusService } from "../services/event-bus.service"
 
-
-
 export function UserMsg() {
     const [msg, setMsg] = useState(null)
 
