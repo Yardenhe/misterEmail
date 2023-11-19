@@ -14,11 +14,13 @@ import { GoogleMap } from "../cmps/GoogleMap"
 
 export function EmailCompose() {
   const { onAddEmail } = useOutletContext()
-  const [email, setEmail] = useState(emailService.getEmptyEmail());
   const parms = useParams();
+
+  const [email, setEmail] = useState(emailService.getEmptyEmail());
   const [type, setType] = useState("normal");
   const [isOpenMap, setIsOpenMap] = useState()
   const [count, setCount] = useState(0)
+
   const intervalIdRef = useRef()
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -40,7 +42,6 @@ export function EmailCompose() {
 
   }, [])
   useEffect(() => {
-    console.log('Counter Mounted' + count)
     intervalIdRef.current = setInterval(() => {
       setCount((prevCount) => prevCount + 1)
     }, 1000)
@@ -48,6 +49,7 @@ export function EmailCompose() {
       console.log('Counter going down')
       clearInterval(intervalIdRef.current)
     }
+    console.log('Counter Mounted' + count)
   }, [])
   useEffect(() => {
     count !== 0 && count % 5 === 0 && (email.subject || email.body || email.to) ?
@@ -77,9 +79,8 @@ export function EmailCompose() {
 
   }
   async function onSaveDraft(isDraft) {
-    let save;
-    if (parms.emailId)
-      save = { ...email, id: parms.emailId }
+    let save
+    if (parms.emailId) save = { ...email, id: parms.emailId }
     !parms.emailId ? await onAddEmail(email, isDraft) : await onAddEmail(save, isDraft)
   }
   async function onSendEmail(ev) {
@@ -90,7 +91,7 @@ export function EmailCompose() {
       console.log("Had issues send email", err)
     }
   }
-  function DynamicStyle() {
+  function getDynamicStyle() {
     switch (type) {
       case 'normal':
         return ""
@@ -108,7 +109,7 @@ export function EmailCompose() {
   if (!email) return <section> Loading... </section>
   return (
 
-    <form className={`email-Compose-form  ${DynamicStyle()}`}>
+    <form className={`email-Compose-form  ${getDynamicStyle()}`}>
 
       <section className="header-compose">
 

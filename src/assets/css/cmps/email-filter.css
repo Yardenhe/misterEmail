@@ -4,8 +4,9 @@
   background-color: #ffffff;
   padding: 1em 0em 0em 0em;
   background-color: rgba(246,248,252,255);
-  
-
+}
+.search-icon{
+  padding-left:10px;
 }
 .search-bar{
   display: grid;

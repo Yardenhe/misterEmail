@@ -100,8 +100,8 @@ function getUser(){
   return loggedinUser
 }
 async function emailCounter() {
-  let emails = await storageService.query(STORAGE_KEY)
   try {  
+    let emails = await storageService.query(STORAGE_KEY)
     return emails.filter(email => !email.isRead).length
   } catch (err) {
     console.log("Had issues counting emails", err)

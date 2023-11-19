@@ -4,7 +4,7 @@ import { EmailList } from "../cmps/EmailList"
 import { EmailFilter } from "../cmps/EmailFilter"
 import { EmailFolderList } from "../cmps/EmailFolderList"
 import { Logo } from "../cmps/logo"
-import { Outlet, useNavigate, useParams, useSearchParams, Link } from "react-router-dom"
+import { Outlet, useNavigate, useParams, useSearchParams, Link, useLocation } from "react-router-dom"
 import { eventBusService } from "../services/event-bus.service"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons"
@@ -12,12 +12,16 @@ import { utilService } from "../services/util.service"
 
 export function EmailIndex() {
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const params = useParams()
+  const location = useLocation();
+
   const [emails, setEmails] = useState(null)
   const [openMenu, setOpenMenu] = useState(true)
   const [unreadCount, setUnreadCount] = useState(0)
-  const navigate = useNavigate()
   const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams))
   const [selectedAll, setSelectedAll] = useState(null);
+  // [e101, e102, e103, {}]
 
   useEffect(() => {
     if (!searchParams.get("to"))
@@ -46,9 +50,10 @@ export function EmailIndex() {
       let addedEmail = await emailService.save(email)
       isDraft ? addedEmail = await emailService.update({ ...addedEmail, sentAt: null })
         : await emailService.update({ ...addedEmail, sentAt: Date.now() });
+
       console.log("🚀 ~ file: EmailIndex.jsx:74 ~ onSaveDraftEmail ~ addedEmail:", addedEmail)
 
-      emails.some((item) => {
+      emails.find((item) => {
         return item.id === addedEmail.id
       }) ?
         setEmails(prevEmails => prevEmails.map(newEmail => newEmail.id === addedEmail.id ? addedEmail : newEmail)) :
@@ -64,7 +69,8 @@ export function EmailIndex() {
       const updatedEmail = await emailService.save(email)
       setEmails(prevEmails => prevEmails.map(email => email.id === updatedEmail.id ? updatedEmail : email))
       if (email.removedAt) {
-        await loadEmail()
+        setEmails(prevEmails => prevEmails.filter(email => email.id !== updatedEmail.id))
+        // await loadEmail()
         eventBusService.emit('show-user-msg', { type: 'success', txt: 'Conversation moved to trash!' })
       }
     } catch (error) {
@@ -133,13 +139,12 @@ export function EmailIndex() {
           filterBy={{ status }} unreadCount={unreadCount} />
       </section>
 
-      {/* {(!params.emailId) && */}
-      <section className="main">
-        <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} handleChangeSelect={handleChangeSelect} />
-      </section>
-
-      {/* //} */}
+      {(!params.emailId || location.pathname.includes('compose')) &&
+        <section className="main">
+          <EmailList emails={emails} onUpdateEmail={onUpdateEmail} setUnreadCount={setUnreadCount} handleChangeSelect={handleChangeSelect} />
+        </section>
+      }
       <Outlet context={{ onAddEmail, onRemoveEmail, onUpdateEmail }} />
-    </section>
+    </section >
   )
 }

@@ -9,6 +9,7 @@
 .app-header section.container {
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .app-header h1.logo {

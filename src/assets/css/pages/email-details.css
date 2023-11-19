@@ -1,5 +1,5 @@
 .email-details {
-  position: fixed; /* Add this */
+
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   padding: 20px;
@@ -33,7 +33,7 @@
 }
 
 .email-details button {
-  position: absolute; /* Add this */
+  
   top: 10px; /* Adjust top position to your preference */
   right: 10px; /* Adjust right position to your preference */
   background-color: #e74c3c;

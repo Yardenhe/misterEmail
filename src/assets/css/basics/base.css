@@ -5,7 +5,7 @@
 html {
     font-family: OpenSans, sans-serif;
     font-size: 16px;
-    scroll-behavior: smooth;
+    overflow: hidden;
 }
 
 body {
@@ -82,12 +82,15 @@ input {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    
 }
 
 
 .main-app main {
     flex-grow: 1;
     width: 100%;
+   
 }
 
 .main-app > footer {

@@ -5,7 +5,6 @@ import { emailService } from "../services/email.service"
 
 
 export function EmailList({ emails, onUpdateEmail, setUnreadCount, handleChangeSelect }) {
-
   return (
     <ul className="email-list">
       {emails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt)).map((email) => (
